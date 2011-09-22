@@ -1,0 +1,727 @@
+title: "RubyConf 2011 MacRuby on Rails 発表原稿"
+author: "高尾宏治"
+date: "2011/09/28"
+
+= はじめに
+
+これはRubyConf2011で私が発表する「MacRuby on Rails」の原稿です。
+当日は基本的にこの資料に書いたとおりのことを話します。
+
+= MacRuby on Rails
+
+(司会者がいない場合)
+Now, we are about to start my presentation.
+
+(司会者がいる場合)
+Thank you for your kind introduction.
+
+---
+
+I would like to express a cordial welcome to all of you.
+And it is a great honor to be here.
+
+= Kouji Takao
+
+Please let me introduce myself first. And let me instroduce my company.
+
+My name is Kouji Takao.
+Both Kouji and Takao are used as first name well in Japan.
+In the case of me, Kouji is my first name. And Takao is my last name.
+Please call me Kouji.
+
+<<click>>
+
+I am a Research Engineer at Network Applied Communication Laboratory Ltd.
+In Japan, my company is famous for Ruby programming language.
+
+As for me, the work about system integrator does anything. 
+For example, system design, programming, planning and negotiation.
+
+And I work as the leader of small team.
+
+<<click>>
+
+I develop some open source software using the time for hobby.
+
+I'm one of MacRuby and cRuby committer. In the case of MacRuby, I am
+in charge of around Core part.  In the case of cRuby, I am in charge
+of Readline module.
+
+<<click>>
+
+You can contact following information; e-mail, twitter and facebook.
+
+<<click>>
+
+= My Company
+
+<<click>>
+
+It repeats itself, my company name is Network Applied Communication
+Laboratory Ltd. 
+
+<<click>>
+
+My company name is a.k.a NaCl. NaCl means salt. The salt
+is necessary for a creature to live. So we named.
+
+<<click>>
+
+My company URL is http://www.netlab.jp/.
+
+<<click>>
+
+My company is located in Shimane, Japan.
+
+<<click>>
+
+My company was founded in 2001.
+It's the 10th anniversary.
+By the way, it's also my 10th anniversary!
+Yeah!!
+
+<<click>>
+
+57 peaple work at my company.
+
+Wow, there is a lot of Rubyist!?
+It's a joke :)
+About half employees work using Ruby.
+
+And 6 people are cRuby committer.
+
+<<click>>
+
+Our kind of work is SI, Training and so on.
+
+<<click>>
+
+= The NaCl Way (part 1)
+
+Please let me introduce The NaCl Way as I see it.
+
+<<click>>
+
+This is our president. His name is Hiroshi Inoue.
+
+<<click>>
+
+= The NaCl Way (part 2)
+
+At my co-worker's wedding party, he said to my co-worker.
+
+<<click>>
+
+TODO: First, You should be happy. 
+
+<<click>>
+
+TODO: Next, you should be happy Your Family.
+
+<<click>>
+
+TODO: Then, if you achieve too enough happiness, please divide your
+happiness a little into Our Company :)
+
+<<click>>
+
+= The NaCl Way (part 3)
+
+So I think the priority of my company is...
+
+<<click>>
+
+First, Employee Oneself
+
+<<click>>
+
+Next: Employee Family
+
+<<click>>
+
+Then: Company
+
+<<click>>
+
+So I love my company!!
+
+= MacRuby on Rails
+
+Now, Let's continue with the main topic of today.
+
+<<click>>
+
+MacRuby on Rails
+
+I will explain how I modified MacRuby to make it a suitable foundation
+for running Rails. I would also like to explain some of the technical
+intricacies that I discovered along the way.
+
+<<click>>
+
+= MacRuby
+
+First, I would like to first briefly explain about MacRuby.
+
+<<click>>
+
+= MacRuby (part 2)
+
+MacRuby is a unique blend of Ruby 1.9 and Objective-C.
+
+<<click>>
+
+The goal of the MacRuby project is to be 100% compatible syntactically
+and behaviorally with Ruby 1.9.
+
+<<click>>
+
+= Ruby 1.9
+
+This is Ruby 1.9.
+
+これは Ruby 1.9 の場合のシステムブロック図です。
+上がユーザよりで、下がハードウェアよりを表しています。
+
+上からユーザが作成したアプリケーション。例えば... Railsのようなミドルウェ
+アも含めます。
+
+その下が Ruby バージョン 1.9 です。
+ここでは Ruby の主要な部品を紹介します。
+
+main parts of ruby
+
+以前は yarv と呼ばれていた Ruby VM (ブィーエム)
+
+Built-in GC using mark and sweap.
+
+StringやArrayなどを含むBuilt-in Library
+
+ReadlineやOpenSSLなどのStandard Library
+
+その下が Library です。
+
+そして、OS です。Ruby 1.9 はLinux、Windows、Mac OS Xなど、さまざまなプ
+ラットフォームで動作します。
+
+Ruby 1.9 はこのような構成になっています。
+
+system アーキテクチャ
+
+(ここは読み上げなくてもいいかも)
+
+<<click>>
+
+= MacRuby (part 3)
+
+次に MacRuby の場合のシステムブロック図を Ruby 1.9 と比較しながら上から
+順に見ていきましょう。
+
+Application はそのままです。
+
+当然、Ruby 1.9 は MacRuby に変わります。
+
+<<click>>
+
+Ruby VMは、LLVM で置き換えています。
+
+<<click>>
+
+Built-in GCは、Mac OS Xが提供しているGCに置き換えられています。
+それはAutoZoneという名前です。
+
+AutoZoneは、Generational でかつ Threaded という特徴があります。
+
+<<click>>
+
+Built-in Libraryの一部は、Mac OS Xが提供している Foundation と呼ばれる
+機能を使って置き換えられています。
+
+Object、Array、String、Hashなどが置き換えられています。
+
+その結果、それらのクラスに Ruby が提供する機能だけでなく、Foundation が
+提供する機能が追加されています。
+
+例えば、Stringにはtransformというメソッドが追加されています。そのメソッ
+ドは、"kouji"に適用すると日本語のキャラクタに変換できます。
+
+"kouji".transform("latin-hiragana") #=> こうじ
+
+Standard Libraryはほとんどそのままです。
+
+その下のLibraryもそのままです。
+
+そして、OSはMac OS Xです。実はMacRubyはMac OS Xでしか動かないのです :)
+
+<<click>>
+
+= MacRuby (part 4)
+
+あらためて全体を見てみるとこんな感じです。
+
+<<click>>
+
+= MacRuby x Cocoa
+
+This is a sample program that plays a sound.
+
+<<click>>
+
+= HelloMacRuby
+
+<<click>>
+
+= HelloMacRuby (part 2)
+
+<<click>>
+
+= MacRuby on Rails
+
+<<click>>
+
+= Current Status
+
+現在では、
+
+<<click>>
+
+Railsプロジェクトの新規作成
+
+<<click>>
+
+scaffoldの実行
+
+<<click>>
+
+serverの起動
+
+<<click>>
+
+そして、Welcome Pageの表示
+
+このように、なにも修正していないRailsをMacRubyで動作させることができます。
+
+Let's travel back in time!
+
+<<click>>
+
+= 7 months ago...
+
+May 2011 in Japan.
+
+<<click>>
+
+I thought, "Does Rails work on MacRuby?".
+
+<<click>>
+
+I tried to install Rails on MacRuby. And it worked.
+
+<<click>>
+
+= Perhaps...
+
+So, I thought, "OK, it installed, but surely the Rails
+generators won't work..."
+
+<<click>>
+
+I tried to create a Rails project. And it worked!?
+
+<<click>>
+
+= Are you kidding me?
+
+Not believing my own eyes, I tried to generate a scaffold...
+
+<<click>>
+
+Then it failed. After all Rails didn't work on MacRuby.
+
+<<click>>
+
+= My approach
+
+So what did I do? My approach was to follow the five-step process
+shown here iteratively.
+
+First, run Rails.
+
+Next, see where it fails. For instance, segmentation faults, abort
+programs and so on.
+
+Next, research the cause.
+
+Next, coding a patch.
+
+Next, run RubySpec to verify my patch.
+
+<<click>>
+
+In order to do this, I needed to know about cRuby, Objective-C, C++
+and LLVM.
+
+When you just work with cRuby then you only need to know about cRuby.
+
+But, when you want to code patches for MacRuby then you also need to
+know about Objective-C, C++ and LLVM.
+
+So, to code patches for MacRuby is more difficult than to do so for cRuby.
+
+<<click>>
+
+= #860 catch/throw
+
+私は私がMacRubyを修正した箇所のうちのいくつかを紹介したいと思います。
+
+最初の修正です。
+
+Trac Issue No.860, catch / throw
+
+MacRuby aborts if you use catch and throw inside a rescue clause.
+
+<<click>>
+
+This error can be reproduced by this code.
+
+<<click>>
+
+If you run this code, then the following error will occur.
+
+Let me explain the reason.
+
+<<click>>
+
+'throw' pops an Exception from the stack.
+
+<<click>>
+
+MacRuby tries to pop an Exception when the rescue block ends, and
+causes an error!
+
+<<click>>
+
+= #860 catch/throw (part 2)
+
+The MacRuby implementation at that time assumed the following way of
+writing exception handling.
+
+しかし、Railsではこの前提が崩れてしまった。
+
+そのため動かなかった。
+
+Before being fixed(60723bf~), 'throw' always popped the current Exception.
+
+このような実装になっているには理由があります。
+
+次のコードをみてください。catchの中にrescueがあります。
+このため、このコードでは
+
+If reached "end", pop Exception. However can't reach here in this case.
+
+So we should pop Exception when we perform "throw".
+
+Railsでは発生しました。
+
+<<click>>
+
+実装はこのようになっています。
+
+<<click>>
+
+= #860 catch/throw (part 3)
+
+Fixed that MacRuby pop Exceptions if it only needs.(60723bf)
+
+<<click>>
+
+= #860 catch/throw (part 4)
+
+ここで説明する。
+
+<<click>>
+
+= #1192 Lookup Constants
+
+それでは次の修正を説明します。
+
+Trac Issue number 860 (eight hundred and sixty), Lookup Constants
+
+これは次の問題(Issue)です。
+
+module_evalやclass_evalをつかったような、いくつかのケースで定数の探索に
+失敗してしまう。
+
+Almost can't lookup nested constants.
+
+<<click>>
+
+This error can be reproduced by this code.
+
+<<click>>
+
+If you run this code, then the following error will occur.
+
+<<click>>
+
+Object.class_eval { B } の行を見てください。
+
+定数Bを探すときcRubyでは、最初にこの枠の範囲を対象にします。
+そして、定数Bを見つけます。
+
+<<click>>
+
+しかし、MacRubyではclass_evalのレシーバであるObjectからしか探索しませんでした。
+当然、Objectには定数Bは定義されていません。その結果、定数Bの探索に失敗します。
+
+can't lookup Constant B assumes lookup it from Object
+
+<<click>>
+
+= #1192 Lookup Constants (part 2)
+
+この問題を理解するには、Rubyにおける定数の探索のやり方を詳しく知る必要があります。そしてまた、それはRubyの言語仕様の中でもとても難しい問題の一つです。
+
+なお、定数探索の詳細を知っておかなくても多くの場合に困りません。
+
+<<click>>
+
+まずはこのコードを見てください。
+
+上から順番に説明します。
+
+1行目で、module Aを定義します。
+2行目で、module Bを定義します。
+3行目で、module Bに定数CONSTを定義します。
+4行目で、トップレベルのmodule A、つまり1行目で定義したmodule Aを再定義します。
+5行目で、定数CONSTを標準出力に出力します。
+
+<<click>>
+
+このとき、cRubyではこの枠の範囲から定数CONSTを探索します。
+そして、module Bに定義された定数CONSTを見つけます。
+
+<<click>>
+
+この枠の範囲を Lexical Scope といいます。
+
+また、本プレゼンテーションでは Lexical Scope から定数を探索することを
+Lexical Constant Lookupと呼びます。
+
+<<click>>
+
+当時のMacRubyには、Lexical Constant Lookup が実装されていませんでした。
+
+Before fixed (6b101bd~), didn't implement the Lexical Constant Lookup
+
+<<click>>
+
+このコードの場合だと、5行目では、module Aからしか定数CONSTを探索しませ
+んでした。
+
+<<click>>
+
+その結果、定数CONSTを見つけることができませんでした。
+
+<<click>>
+
+= Lookup Constants is complex
+
+次はclass_evalを使った例です。
+
+class_evalを使うと、定数探索はもっと複雑になります。
+
+class_evalに文字列を渡すか、それともブロックを渡すかで結果が異なります。
+
+左が文字列を渡しています。
+
+右がブロックを渡しています。
+
+それ以外の違いはありません。
+
+<<click>>
+
+= class_eval(&Block)
+
+Blockを渡す場合について、上から順に説明します。
+
+First, about performing class_eval with Block. 
+Let me explain this code sequentially from the top.
+
+1行目で、module Aを定義します。
+2行目で、定数CONSTを定義します。
+3行目で、メソッドfを定義します。
+4行目で、class_evalをブロックを渡して呼び出します。
+5行目で、定数CONSTを標準出力に出力します。
+6行目で、class_evalに渡すブロックの終端を指定します。
+実際には、4〜6行目はメソッドfを呼び出したときに実行されます。
+
+少し飛ばします。
+10行目で、class Kを定義します。
+11行目で、class Kに定数CONSTを定義します。
+12行目で、extend Aを実行します。
+13行目で、module Aのメソッドfを呼び出します。
+
+その結果、4〜6行目が実行されます。
+
+このときの定数CONSTを最初に探索する範囲がわかりますか？
+
+<<click>>
+
+これは簡単ですね。
+
+先ほどの説明と同様の理由から、この枠の範囲から最初に定数CONSTを探索します。
+
+<<click>>
+
+Therefore, 'p method' outputs the string "A's CONST".
+
+<<click>>
+
+= class_eval(String)
+
+次に、文字列を渡す場合についてです。
+
+Next, about performing class_eval with String.
+
+先ほどのものとの違いは4〜6行目だけです。
+
+4行目で、class_evalを文字列を渡して呼び出します。
+5行目で、定数CONSTを標準出力に出力します。
+6行目で、ヒアドキュメントの終端を指定します。
+実際には、4〜6行目はメソッドfを呼び出したときに実行されます。
+
+そして、先ほどと同様に、13行目で、module Aのメソッドfを呼び出します。
+
+このときの定数CONSTを最初に探索する範囲がわかりますか？
+
+<<click>>
+
+実はこの枠の範囲です。
+
+これは、メソッドfの実行時に、class_evalに渡された文字列をパーズして、そ
+のときに定数の探索範囲を決定するからです。その結果、13行目の周辺が、定
+数の探索範囲となります。
+
+<<click>>
+
+Therefore, 'p method' outputs the string "K's CONST".
+
+<<click>>
+
+このような実行時にかわる範囲のことをdynamic scopeといいます。
+
+<<click>>
+
+= Lookup Constants is complex (part 2)
+
+最後にそれぞれを並べて見てみましょう。
+
+class_evalに渡す引数が違うだけで、定数の探索範囲はこのように違ってきます。
+
+<<click>>
+
+= Manage somehow
+
+このように複雑な定数探索の問題を修正するのは、簡単ではありませんでした。
+
+2回のやり直しがあり、3回目でようやく満足な結果を得ることが出来ました。
+ソースコードの修正は3000行以上になりました。
+
+<<click>>
+
+この修正が完了したとき、MacRubyのメイン開発者であるLaurentは、チャット
+で私にこう書きました。
+
+<<click>>
+
+21 Apr 2011 15:24
+Laurent S.
+it's official, kouji is the hero of the day/week/month/...? his patch seems to fix remaining lexical const lookup bugs :)
+
+私はとてもうれしかったです。
+
+このような複雑な問題を含め、いくつか修正しました。
+
+<<click>>
+
+= A very complex bug
+
+しかし、喜んでいたのもつかの間で、私は定数探索に関するとても難しいエラー
+を見つけました。
+
+I found a behavior that is complex to implement.
+
+<<click>>
+
+This error can be reproduced by this code.
+
+Let me explain this code sequentially from the top.
+
+1行目で、module Aを定義します。
+In line number one, module A is defined.
+
+2行目で、module Aに定数Bを定義します。
+In line number two, constant B is defined under module A.
+
+少し飛ばして、
+I make some explanation.
+
+<<click>>
+
+
+
+<<click>>
+
+
+<<click>>
+
+= A very complex bug (part 2)
+
+= Demo
+
+さぁ、それではみなさんに実際の成果をお見せするときがきました。
+
+少し古いRails 3.0.7を修正なしで、MacRubyで動作させます。
+
+<<click>>
+
+= #1390 rb_vm_prepare_block
+
+Abort when I pressed “About your application’s environment” in rails
+3.0.7 Welcome Page.
+
+<<click>>
+
+= Workaround
+
+Ignored if we get an abort that is described above.
+
+<<click>>
+
+= However...
+
+I didn't show my Rails Info.
+
+<<click>>
+
+= MacRuby trip by the train continues...
+
+<<click>>
+
+= Conclusion
+
+MacRuby
+A unique blend of Ruby 1.9 and Objective-C.
+The goal is to be 100% compatible with Ruby 1.9.
+
+MacRuby on Rails
+We became to show the Welcome Page.
+But we have many things to complete.
+
+<<click>>
+
+################################################################################
+Local Variables:
+mode: rd
+End:

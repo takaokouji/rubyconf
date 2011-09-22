@@ -659,24 +659,54 @@ This error can be reproduced by this code.
 Let me explain this code sequentially from the top.
 
 1行目で、module Aを定義します。
-In line number one, we module A is defined.
+In line number one, we define module A.
 
 2行目で、module Aに定数Bを定義します。
-In line number two, constant B is defined under module A.
+In line number two, we define constant B under module A.
 
-少し飛ばして、
-I make some explanation.
+5行目で、Aをレシーバに指定してclass_evalを実行します。
+In line number five, we specify module A as receiver, and perform
+class_eval with block.
+
+6行目で、class_evalのブロックの中であるためレシーバはクラスAです。
+そのため、クラスメソッドfを定義します。
+In line number six, we are inside
+class_eval block, so current receiver is module A.
+Therefore, we define class method f of module A. 
+
+7行目で、定数Bを標準出力に出力します。
+In line number seven, we output Constant B to standard output.
+
+11行目で、Aのfを呼び出します。そして、定数Bを出力するために探索します。
+In line number eleven, we perform method f of module A. Then we're
+looking up constant B to output.
 
 <<click>>
 
-
+このとき、最初にこの枠の範囲から定数Bを探索します。そして、見つからない
+ため、Object、つまりトップレベルから定数Bを探索します。
 
 <<click>>
 
+ここで注意が必要です。class_evalのレシーバは、定数の探索範囲に含みませ
+ん。これはRubyの言語仕様です。
+
+<<click>>
+
+両方とも見つからないため、定数Bの探索に失敗すると思ったの
+ですが、
 
 <<click>>
 
 = A very complex bug (part 2)
+
+なんと、Ruby 1.9 ではAからも探索していまい、定数Bを見つけてしまったのです。
+
+<<click>>
+
+(KOUJI_TODO: いまここです)
+
+<<click>>
 
 = Demo
 

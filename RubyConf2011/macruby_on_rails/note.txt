@@ -2,7 +2,13 @@ title: "RubyConf 2011 MacRuby on Rails 発表原稿"
 author: "高尾宏治"
 date: "2011/09/28"
 
-TODO: Fix slides at:
+= Fix slides at:
+
+Torさんへ、このTODOのところに私へのスライドの修正指示を書いてください。
+
+TODO: これから修正します。
+
+Done: 以下は修正が完了しています。
 21 (and the following slides):
  Employee Oneself (in blue frame) > Employee
  First: Employee Oneself > First: Employee
@@ -13,6 +19,7 @@ TODO: Fix slides at:
 40
  Not sure but it looks like "(I)Click". Maybe you need to change it to "(1)Click" ?
  ie. "i" to "1" (one)
+ -> フォントを修正して数字の1に見えるようにしました。
  
 = はじめに
 
@@ -46,6 +53,8 @@ Please call me Kouji.
 I am a Research Engineer at Network Applied Communication Laboratory Ltd.
 In Japan, my company is famous in connection with the Ruby programming language.
 
+私はシステムインテグレータとして行うことはなんでもやります。
+例えば、システムデザイン、プログラミング、計画、顧客との打合せです。
 As for me, the work about system integrator does anything. 
 For example, system design, programming, planning and negotiation.
 TODO: これは日本語だったらどういういみかな。 --Tor
@@ -56,8 +65,9 @@ And I work as the leader of small team.
 
 I develop open source software during my spare time.
 
-I'm a MacRuby and cRuby committer. In MacRuby, I am in charge of some of the Core parts.  In cRuby, I am in charge
-of the Readline module.
+I'm a MacRuby and cRuby committer.
+In MacRuby, I am in charge of some of the Core parts.
+In cRuby, I am in charge of the Readline module.
 
 <<click>>
 
@@ -74,8 +84,10 @@ Laboratory Ltd.
 
 <<click>>
 
-My company is also known as NaCl. As you probably know, NaCl means salt. Salt
-is necessary for all creatures to live. This is why we named the company NaCl.
+My company is also known as NaCl.
+As you probably know, NaCl means salt(ソォルト).
+Salt(ソォルト) is necessary for all creatures to live.
+This is why we named the company NaCl.
 
 <click>>
 
@@ -124,19 +136,15 @@ In a speech at my co-worker's wedding party, he said to my co-worker.
 
 <<click>>
 
-TODO: First, You should be happy. 
-TODO: プレゼンからの文書を引っ張ってくるといいでしょう。--Tor
+First, I want You to be happy.
 
 <<click>>
 
-TODO: Next, you should be happy Your Family.
-TODO: 同上 --Tor
+Next, I want you to make Your Family happy.
 
 <<click>>
 
-TODO: Then, if you achieve too enough happiness, please divide your
-happiness a little into Our Company :)
-TODO: 同上 --Tor
+Finally, if you have more happiness left, then please share it with Our Company :)
 
 <<click>>
 
@@ -204,40 +212,39 @@ and the bottom side shows the blocks facing the hardware.
 上からユーザが作成したアプリケーション。例えば... Railsのようなミドルウェ
 アも含めます。
 At the top we have the applications made by the Ruby user.
-For instance an application such as <...> or middleware such as Ruby on Rails
+For instance an application such as Rabbit or middleware such as Ruby on Rails.
 
 その下が Ruby バージョン 1.9 です。
-Below that we have Ruby 1.9.
 ここでは Ruby の主要な部品を紹介します。
+Below that we have Ruby 1.9.
 These are Ruby's main building blocks.
 
-以前は yarv と呼ばれていた Ruby VM (ブィーエム)
-We have Ruby VM, Ruby's Virtual Machine, which was previously called yarv.
+以前は yarv と呼ばれていた Ruby VM 
+We have Ruby VM(ブィーエム), 
+Ruby's Virtual Machine, 
+which was previously called YARV(ヤーブィ).
 
 We have the built-in garbage collection, which uses mark and sweep.
 
 StringやArrayなどを含むBuilt-in Library
-Then we have the Built-in Libraries, which includes the String class and the Array class and so on.
+Then we have the Built-in Libraries, 
+which includes the String class and the Array class and so on.
 
 ReadlineやOpenSSLなどのStandard Library
-And then we have the Standard Library, which includes Readline, OpenSSL and so on.
+And then we have the Standard Library, 
+which includes Readline, OpenSSL and so on.
 
 その下が Library です。
-Below Ruby, we have the system library.
-TODO: これであってる？--Tor
+Below Ruby, we have the system libraries.
 
 そして、OS です。Ruby 1.9 はLinux、Windows、Mac OS Xなど、さまざまなプ
 ラットフォームで動作します。
 And below the libraries, we have the Operating System.
-Ruby 1.9 operates on a number of different platforms, among others Linux, Windows, Mac OS X and so on.
+Ruby 1.9 operates on a number of different platforms, 
+among others Linux, Windows, Mac OS X and so on.
 
 Ruby 1.9 はこのような構成になっています。
 So, this is the structure of Ruby 1.9.
-
-system アーキテクチャ
-TODO: これはもういらないかな。--Tor
-
-(ここは読み上げなくてもいいかも)
 
 <<click>>
 
@@ -245,7 +252,8 @@ TODO: これはもういらないかな。--Tor
 
 次に MacRuby の場合のシステムブロック図を Ruby 1.9 と比較しながら上から
 順に見ていきましょう。
-So let's try to compare this with the system diagram as it looks for MacRuby. We'll look at each element in turn.
+So let's try to compare this with the system diagram as it looks for MacRuby.
+We'll look at each element in turn.
 
 Application はそのままです。
 The application stays as it is.
@@ -256,36 +264,43 @@ Naturally, Ruby 1.9 becomes MacRuby.
 <<click>>
 
 Ruby VMは、LLVM で置き換えています。
-Ruby VM is replaced by LLVM.
+Ruby VM(ヴィーエム) is replaced by LLVM(エルエルヴィーエム).
 
 <<click>>
 
 Built-in GCは、Mac OS Xが提供しているGCに置き換えられています。
 それはAutoZoneという名前です。
-The built-in Garbage Collection is replaced by the mechanism provided by Mac OS X. This Mac OS X feature is called Autozone.
-
 AutoZoneは、Generational でかつ Threaded という特徴があります。
-Autozone is a Generational and Threaded Garbage Collection mechanism.
+
+The built-in Garbage Collection is replaced by the mechanism provided by Mac OS X.
+This Mac OS X feature is called AutoZone.
+AutoZone is a Generational and Threaded Garbage Collection mechanism.
 
 <<click>>
 
 Built-in Libraryの一部は、Mac OS Xが提供している Foundation と呼ばれる
 機能を使って置き換えられています。
-Part of the Built-in Library is replaced by a feature called Foundation which is provided by Mac OS X.
-
 Object、Array、String、Hashなどが置き換えられています。
-Object, Array, String, Hash and others are replaced this way.
-
 その結果、それらのクラスに Ruby が提供する機能だけでなく、Foundation が
 提供する機能が追加されています。
-The result is that these classes get not only the functionality provided by Ruby, but also the functionality provided by Foundation.
+
+Part of the Built-in Library is replaced by a feature
+called Foundation which is provided by Mac OS X.
+Object, Array, String, Hash and others are replaced this way.
+The result is that these classes get not only the functionality
+provided by Ruby,
+but also the functionality provided by Foundation.
+
+<<click>>
 
 例えば、Stringにはtransformというメソッドが追加されています。そのメソッ
 ドは、"kouji"に適用すると日本語のキャラクタに変換できます。
-For instance, a Foundation method called "transform" is added to the Ruby String class.
-This method can convert the alphabet version of my name "kouji" into the corresponding japanese hiragana characters.
+For instance, 
+a Foundation method called "transform" is added to the Ruby String class.
+This method can convert the alphabet version of my name "kouji"
+into the corresponding japanese hiragana characters.
 
-"kouji".transform("latin-hiragana") #=> こうじ
+<<click>>
 
 Standard Libraryはほとんどそのままです。
 The Standard Libraries are more or less similar to Ruby 1.9.
@@ -308,25 +323,33 @@ So, if we look at the whole... well, then it looks like this.
 
 = MacRuby x Cocoa
 
+TODO:
+
 This is a sample program that plays a sound.
 
 <<click>>
 
 = HelloMacRuby
 
+TODO:
+
 <<click>>
 
 = HelloMacRuby (part 2)
+
+TODO:
 
 <<click>>
 
 = MacRuby on Rails
 
+TODO:
+
 <<click>>
 
 = Current Status
 
-現在では、
+現在では...
 Let's see what we can currently do with MacRuby on Rails
 
 <<click>>
@@ -351,14 +374,17 @@ Starting up the server.
 And ... showing the welcome page.
 
 このように、なにも修正していないRailsをMacRubyで動作させることができます。
-So it is currently possible to run an freshly generated and unmodified Rails application on MacRuby.
-TODO: この解釈でいいですかね？--Tor
+So it is currently possible to run a Rails application on MacRuby.
+TOR_TODO: この解釈でいいですかね？--Tor
+-> ここは少し違うような気がします。Ruby処理系でRailsを動かす場合、いくつかRails自体を修正する必要があります。それをしなくてもMacRubyでRailsをここまで動かすことが出来る。ということが伝えたいです。
 
 Let's travel back in time!
 
 <<click>>
 
 = 7 months ago...
+
+7 months ago...
 
 May 2011 in Japan.
 
@@ -408,8 +434,8 @@ The third step is when I research the cause of the failure.
 
 The fourth step is to code a patch that fixes the problem.
 
-And finally, I run RubySpec to verify my patch, and repeat from the top if necessary.
-TODO: and repeatの節を追加しましたが、大丈夫でしょうか？
+And finally, I run RubySpec to verify my patch, 
+and repeat from the top if necessary.
 
 <<click>>
 
@@ -421,20 +447,22 @@ When you just work with cRuby then you only need to know about cRuby.
 But, when you want to code patches for MacRuby then you also need to
 know about Objective-C, C++ and LLVM.
 
-So, I think that to code patches for MacRuby is more difficult than to do so for cRuby.
+So, I think that to code patches for MacRuby is more difficult than
+to do so for cRuby.
 
 <<click>>
 
 = #860 catch/throw
 
 私は私がMacRubyを修正した箇所のうちのいくつかを紹介したいと思います。
-Now, I would like to discuss a couple of cases among the problems that I fixed in MacRuby.
-TODO: "a couple" (2つ）でいいですかね？ -- Tor
+Now, I would like to discuss
+a couple of cases among the problems that I fixed in MacRuby.
 
 最初の修正です。
 So the first case is
 
-Trac Issue No.860, an issue with catch / throw and exception handling in MacRuby.
+Trac Issue No.860,
+an issue with catch / throw and exception handling in MacRuby.
 
 <<click>>
 
@@ -452,8 +480,9 @@ First, 'throw' pops an Exception from the stack.
 
 <<click>>
 
-Then, when the rescue block ends, then MacRuby tries to pop another Exception from the stack. This causes an error since the stack is empty!
-TODO:修正したが、これでいいでしょうか --Tor
+Then, when the rescue block ends,
+then MacRuby tries to pop another Exception from the stack.
+This causes an error since the stack is empty!
 
 <<click>>
 
@@ -471,11 +500,12 @@ So, this caused an error when running Rails on MacRuby.
 Before being fixed(60723bf~), 'throw' always popped the current Exception.
 
 このような実装になっているには理由があります。
-TODO: 今日の修正はここまでです。おやすみなさい。--Tor
+TOR_TODO: 今日の修正はここまでです。おやすみなさい。--Tor
 
 次のコードをみてください。catchの中にrescueがあります。
 このため、このコードでは
-Take a look at the following code. We have a rescue statement inside a catch block.
+Take a look at the following code.
+We have a rescue statement inside a catch block.
 
 Therefore, in the following code ... 
 
@@ -540,7 +570,7 @@ can't lookup Constant B assumes lookup it from Object
 
 <<click>>
 
-= #1192 Lookup Constants (part 2)
+= #1192 Constant lookup (part 2)
 
 この問題を理解するには、Rubyにおける定数の探索のやり方を詳しく知る必要があります。そしてまた、それはRubyの言語仕様の中でもとても難しい問題の一つです。
 
@@ -587,7 +617,7 @@ Before fixed (6b101bd~), didn't implement the Lexical Constant Lookup
 
 <<click>>
 
-= Lookup Constants is complex
+= Constant Lookup is complex
 
 次はclass_evalを使った例です。
 
@@ -675,7 +705,7 @@ Therefore, 'p method' outputs the string "K's CONST".
 
 <<click>>
 
-= Lookup Constants is complex (part 2)
+= Constant Lookup is complex (part 2)
 
 最後にそれぞれを並べて見てみましょう。
 

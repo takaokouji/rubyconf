@@ -53,11 +53,11 @@ Please call me Kouji.
 I am a Research Engineer at Network Applied Communication Laboratory Ltd.
 In Japan, my company is famous in connection with the Ruby programming language.
 
-私はシステムインテグレータとして行うことはなんでもやります。
-例えば、システムデザイン、プログラミング、計画、顧客との打合せです。
 As for me, the work about system integrator does anything. 
 For example, system design, programming, planning and negotiation.
-TODO: これは日本語だったらどういういみかな。 --Tor
+TOR_TODO: これは日本語だったらどういういみかな。 --Tor
+-> 私はシステムインテグレータとして行うことはなんでもやります。
+例えば、システムデザイン、プログラミング、計画、顧客との打合せです。
 
 And I work as the leader of small team.
 

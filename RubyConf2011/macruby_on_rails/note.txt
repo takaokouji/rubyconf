@@ -367,7 +367,6 @@ Generating a scaffold.
 serverの起動
 Starting up the server.
 
-
 <<click>>
 
 そして、Welcome Pageの表示
@@ -488,6 +487,8 @@ This causes an error since the stack is empty!
 
 = #860 catch/throw (part 2)
 
+TODO:
+
 The MacRuby implementation at that time assumed the following way of
 writing exception handling.
 
@@ -523,11 +524,15 @@ Railsでは発生しました。
 
 = #860 catch/throw (part 3)
 
+TODO:
+
 Fixed that MacRuby pop Exceptions if it only needs.(60723bf)
 
 <<click>>
 
 = #860 catch/throw (part 4)
+
+TODO:
 
 ここで説明する。
 

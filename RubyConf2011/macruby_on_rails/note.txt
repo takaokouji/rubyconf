@@ -704,7 +704,15 @@ looking up constant B to output.
 
 <<click>>
 
-(KOUJI_TODO: いまここです)
+でも、Ruby 1.8.7 は私の想像通り、定数Bの探索に失敗します。当然、
+MacRuby もこのように動作します。
+
+困った私は matz に相談しました。
+
+<<click>>
+
+その結果、これは Ruby 1.9 のバグだということになりました。
+そして、あったいう間に修正されました。
 
 <<click>>
 
@@ -712,7 +720,8 @@ looking up constant B to output.
 
 さぁ、それではみなさんに実際の成果をお見せするときがきました。
 
-少し古いRails 3.0.7を修正なしで、MacRubyで動作させます。
+MacRuby で Rails を動作させます。
+ここでは、Rails のバージョンは少し古いのですが 3.0.7 です。
 
 <<click>>
 

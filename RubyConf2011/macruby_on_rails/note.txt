@@ -378,7 +378,7 @@ So, to code patches for MacRuby is more difficult than to do so for cRuby.
 
 Trac Issue No.860, catch / throw
 
-MacRuby aborts if you use catch and throw inside a rescue clause.
+
 
 <<click>>
 
@@ -726,40 +726,87 @@ Rails works on MacRuby.
 ここでは、Rails のバージョンは少し古いのですが 3.0.7 です。
 At this time, I use Rails version 3.0.7 that is bit old.
 
+(デモを開始)
+
 <<click>>
 
 = #1390 rb_vm_prepare_block
 
-Abort when I pressed “About your application’s environment” in rails
-3.0.7 Welcome Page.
+実は、Welcome Pageにある"About your application’s environment"リンクをクリックするとabortします。
 
-<<click>>
+Actually, MacRuby aborts if you click "About your application’s environment" link in Welcome page.
 
-= Workaround
-
-Ignored if we get an abort that is described above.
-
-<<click>>
-
-= However...
-
-I didn't show my Rails Info.
+Rails を動かすのは定数探索よりも難しい問題ですね。
+Hmm, working Rails on MacRuby is more difficult than to implement
+lexical constant lookup, isn't it?
 
 <<click>>
 
 = MacRuby trip by the train continues...
 
+MacRuby による電車の旅はまだまだ続きます。
+ぜひ、みなさんも一緒に旅をしましょう。
+
+<<click>>
+
+This is MacRuby project URL.
+
+<<click>>
+
+This is MacRuby official twitter account.
+
+<<click>>
+
+MacRuby is on GitHub.
+
+<<click>>
+
+This is MacRuby Mailing List address.
+
 <<click>>
 
 = Conclusion
+
+<<click>>
 
 MacRuby
 A unique blend of Ruby 1.9 and Objective-C.
 The goal is to be 100% compatible with Ruby 1.9.
 
+<<click>>
+
 MacRuby on Rails
 We became to show the Welcome Page.
 But we have many things to complete.
+
+<<click>>
+
+= Q & A
+
+それでは、何か質問はありますか？
+質問される方は、できれば、ゆっくりとシンプルなものをお願いします。
+
+<<click>>
+
+= Acknowledgement
+
+最後に、
+
+このプレゼンテーションの機会を与えてくださった RubyConf の運営者の方に
+感謝いたします。
+
+<<click>>
+
+私の少ない英語力を補ってくれた同僚の Tor に感謝いたします。
+
+<<click>>
+
+そして、私のつたない英語でのプレゼンテーションにつきあってくださった会
+場のみなさまに感謝いたします。
+
+<<click>>
+
+ありがとうござました。
 
 <<click>>
 

@@ -2,6 +2,18 @@ title: "RubyConf 2011 MacRuby on Rails 発表原稿"
 author: "高尾宏治"
 date: "2011/09/28"
 
+TODO: Fix slides at:
+21 (and the following slides):
+ Employee Oneself (in blue frame) > Employee
+ First: Employee Oneself > First: Employee
+ Next: Employee Family > Next: Employee's Family
+ Finally: Company
+31
+ Library > System libraries
+40
+ Not sure but it looks like "(I)Click". Maybe you need to change it to "(1)Click" ?
+ ie. "i" to "1" (one)
+ 
 = はじめに
 
 これはRubyConf2011で私が発表する「MacRuby on Rails」の原稿です。
@@ -10,46 +22,46 @@ date: "2011/09/28"
 = MacRuby on Rails
 
 (司会者がいない場合)
-Now, we are about to start my presentation.
+Now, I am about to start my presentation.
 
 (司会者がいる場合)
 Thank you for your kind introduction.
 
 ---
 
-I would like to express a cordial welcome to all of you.
-And it is a great honor to be here.
+I would like welcome all of you.
+It is a great honor for me to be here.
 
 = Kouji Takao
 
-Please let me introduce myself first. And let me instroduce my company.
+Please let me introduce myself first. And let me introduce my company.
 
 My name is Kouji Takao.
-Both Kouji and Takao are used as first name well in Japan.
-In the case of me, Kouji is my first name. And Takao is my last name.
+Both Kouji and Takao are commonly used as first names in Japan.
+In my case, Kouji is my first name. And Takao is my last name.
 Please call me Kouji.
 
 <<click>>
 
 I am a Research Engineer at Network Applied Communication Laboratory Ltd.
-In Japan, my company is famous for Ruby programming language.
+In Japan, my company is famous in connection with the Ruby programming language.
 
 As for me, the work about system integrator does anything. 
 For example, system design, programming, planning and negotiation.
+TODO: これは日本語だったらどういういみかな。 --Tor
 
 And I work as the leader of small team.
 
 <<click>>
 
-I develop some open source software using the time for hobby.
+I develop open source software during my spare time.
 
-I'm one of MacRuby and cRuby committer. In the case of MacRuby, I am
-in charge of around Core part.  In the case of cRuby, I am in charge
-of Readline module.
+I'm a MacRuby and cRuby committer. In MacRuby, I am in charge of some of the Core parts.  In cRuby, I am in charge
+of the Readline module.
 
 <<click>>
 
-You can contact following information; e-mail, twitter and facebook.
+You can contact me on e-mail, twitter or facebook.
 
 <<click>>
 
@@ -57,42 +69,42 @@ You can contact following information; e-mail, twitter and facebook.
 
 <<click>>
 
-It repeats itself, my company name is Network Applied Communication
+As I said previously, my company's name is Network Applied Communication
 Laboratory Ltd. 
 
 <<click>>
 
-My company name is a.k.a NaCl. NaCl means salt. The salt
-is necessary for a creature to live. So we named.
+My company is also known as NaCl. As you probably know, NaCl means salt. Salt
+is necessary for all creatures to live. This is why we named the company NaCl.
+
+<click>>
+
+You can check out NaCl's homepage at www.netlab.jp.
 
 <<click>>
 
-My company URL is http://www.netlab.jp/.
+NaCl is located in Shimane Prefecture in Japan.
 
 <<click>>
 
-My company is located in Shimane, Japan.
-
-<<click>>
-
-My company was founded in 2001.
-It's the 10th anniversary.
-By the way, it's also my 10th anniversary!
+The company was founded in 2001.
+So, 2011 is the 10th anniversary.
+By the way, it's also my own 10th anniversary as an employee!
 Yeah!!
 
 <<click>>
 
-57 peaple work at my company.
+57 people work at my company.
 
-Wow, there is a lot of Rubyist!?
-It's a joke :)
-About half employees work using Ruby.
+Wow, that's a lot of Rubyists!?
+Just joking :)
+Actually, about half of my co-workers work using Ruby.
 
-And 6 people are cRuby committer.
+However, 6 people are cRuby committers.
 
 <<click>>
 
-Our kind of work is SI, Training and so on.
+The company works with System Integration, Training and so on.
 
 <<click>>
 
@@ -108,46 +120,49 @@ This is our president. His name is Hiroshi Inoue.
 
 = The NaCl Way (part 2)
 
-At my co-worker's wedding party, he said to my co-worker.
+In a speech at my co-worker's wedding party, he said to my co-worker.
 
 <<click>>
 
 TODO: First, You should be happy. 
+TODO: プレゼンからの文書を引っ張ってくるといいでしょう。--Tor
 
 <<click>>
 
 TODO: Next, you should be happy Your Family.
+TODO: 同上 --Tor
 
 <<click>>
 
 TODO: Then, if you achieve too enough happiness, please divide your
 happiness a little into Our Company :)
+TODO: 同上 --Tor
 
 <<click>>
 
 = The NaCl Way (part 3)
 
-So I think the priority of my company is...
+So I think the priorities of my company is as follows...
 
 <<click>>
 
-First, Employee Oneself
+First, The Employee's well-being
 
 <<click>>
 
-Next: Employee Family
+Next, the well-being of the Employee's Family
 
 <<click>>
 
-Then: Company
+And finally: The company itself
 
 <<click>>
 
-So I love my company!!
+This is why I love my company!!
 
 = MacRuby on Rails
 
-Now, Let's continue with the main topic of today.
+Now, Let's continue on to the main topic of today.
 
 <<click>>
 
@@ -182,31 +197,45 @@ This is Ruby 1.9.
 
 これは Ruby 1.9 の場合のシステムブロック図です。
 上がユーザよりで、下がハードウェアよりを表しています。
+This system diagram shows the main building blocks of Ruby 1.9.
+The top side shows the blocks facing the user,
+and the bottom side shows the blocks facing the hardware.
 
 上からユーザが作成したアプリケーション。例えば... Railsのようなミドルウェ
 アも含めます。
+At the top we have the applications made by the Ruby user.
+For instance an application such as <...> or middleware such as Ruby on Rails
 
 その下が Ruby バージョン 1.9 です。
+Below that we have Ruby 1.9.
 ここでは Ruby の主要な部品を紹介します。
-
-main parts of ruby
+These are Ruby's main building blocks.
 
 以前は yarv と呼ばれていた Ruby VM (ブィーエム)
+We have Ruby VM, Ruby's Virtual Machine, which was previously called yarv.
 
-Built-in GC using mark and sweap.
+We have the built-in garbage collection, which uses mark and sweep.
 
 StringやArrayなどを含むBuilt-in Library
+Then we have the Built-in Libraries, which includes the String class and the Array class and so on.
 
 ReadlineやOpenSSLなどのStandard Library
+And then we have the Standard Library, which includes Readline, OpenSSL and so on.
 
 その下が Library です。
+Below Ruby, we have the system library.
+TODO: これであってる？--Tor
 
 そして、OS です。Ruby 1.9 はLinux、Windows、Mac OS Xなど、さまざまなプ
 ラットフォームで動作します。
+And below the libraries, we have the Operating System.
+Ruby 1.9 operates on a number of different platforms, among others Linux, Windows, Mac OS X and so on.
 
 Ruby 1.9 はこのような構成になっています。
+So, this is the structure of Ruby 1.9.
 
 system アーキテクチャ
+TODO: これはもういらないかな。--Tor
 
 (ここは読み上げなくてもいいかも)
 
@@ -216,48 +245,64 @@ system アーキテクチャ
 
 次に MacRuby の場合のシステムブロック図を Ruby 1.9 と比較しながら上から
 順に見ていきましょう。
+So let's try to compare this with the system diagram as it looks for MacRuby. We'll look at each element in turn.
 
 Application はそのままです。
+The application stays as it is.
 
 当然、Ruby 1.9 は MacRuby に変わります。
+Naturally, Ruby 1.9 becomes MacRuby.
 
 <<click>>
 
 Ruby VMは、LLVM で置き換えています。
+Ruby VM is replaced by LLVM.
 
 <<click>>
 
 Built-in GCは、Mac OS Xが提供しているGCに置き換えられています。
 それはAutoZoneという名前です。
+The built-in Garbage Collection is replaced by the mechanism provided by Mac OS X. This Mac OS X feature is called Autozone.
 
 AutoZoneは、Generational でかつ Threaded という特徴があります。
+Autozone is a Generational and Threaded Garbage Collection mechanism.
 
 <<click>>
 
 Built-in Libraryの一部は、Mac OS Xが提供している Foundation と呼ばれる
 機能を使って置き換えられています。
+Part of the Built-in Library is replaced by a feature called Foundation which is provided by Mac OS X.
 
 Object、Array、String、Hashなどが置き換えられています。
+Object, Array, String, Hash and others are replaced this way.
 
 その結果、それらのクラスに Ruby が提供する機能だけでなく、Foundation が
 提供する機能が追加されています。
+The result is that these classes get not only the functionality provided by Ruby, but also the functionality provided by Foundation.
 
 例えば、Stringにはtransformというメソッドが追加されています。そのメソッ
 ドは、"kouji"に適用すると日本語のキャラクタに変換できます。
+For instance, a Foundation method called "transform" is added to the Ruby String class.
+This method can convert the alphabet version of my name "kouji" into the corresponding japanese hiragana characters.
 
 "kouji".transform("latin-hiragana") #=> こうじ
 
 Standard Libraryはほとんどそのままです。
+The Standard Libraries are more or less similar to Ruby 1.9.
 
 その下のLibraryもそのままです。
+The system libraries are also unchanged.
 
 そして、OSはMac OS Xです。実はMacRubyはMac OS Xでしか動かないのです :)
+And the OS is of course Mac OS X.
+Actually, MacRuby only runs on Mac OS X.
 
 <<click>>
 
 = MacRuby (part 4)
 
 あらためて全体を見てみるとこんな感じです。
+So, if we look at the whole... well, then it looks like this.
 
 <<click>>
 
@@ -282,24 +327,32 @@ This is a sample program that plays a sound.
 = Current Status
 
 現在では、
+Let's see what we can currently do with MacRuby on Rails
 
 <<click>>
 
 Railsプロジェクトの新規作成
+Creating a new Rails project.
 
 <<click>>
 
 scaffoldの実行
+Generating a scaffold.
 
 <<click>>
 
 serverの起動
+Starting up the server.
+
 
 <<click>>
 
 そして、Welcome Pageの表示
+And ... showing the welcome page.
 
 このように、なにも修正していないRailsをMacRubyで動作させることができます。
+So it is currently possible to run an freshly generated and unmodified Rails application on MacRuby.
+TODO: この解釈でいいですかね？--Tor
 
 Let's travel back in time!
 
@@ -347,14 +400,16 @@ shown here iteratively.
 
 First, run Rails.
 
-Next, see where it fails. For instance, segmentation faults, abort
+The next step is to see where it fails.
+For instance, segmentation faults, abort
 programs and so on.
 
-Next, research the cause.
+The third step is when I research the cause of the failure.
 
-Next, coding a patch.
+The fourth step is to code a patch that fixes the problem.
 
-Next, run RubySpec to verify my patch.
+And finally, I run RubySpec to verify my patch, and repeat from the top if necessary.
+TODO: and repeatの節を追加しましたが、大丈夫でしょうか？
 
 <<click>>
 
@@ -366,19 +421,20 @@ When you just work with cRuby then you only need to know about cRuby.
 But, when you want to code patches for MacRuby then you also need to
 know about Objective-C, C++ and LLVM.
 
-So, to code patches for MacRuby is more difficult than to do so for cRuby.
+So, I think that to code patches for MacRuby is more difficult than to do so for cRuby.
 
 <<click>>
 
 = #860 catch/throw
 
 私は私がMacRubyを修正した箇所のうちのいくつかを紹介したいと思います。
+Now, I would like to discuss a couple of cases among the problems that I fixed in MacRuby.
+TODO: "a couple" (2つ）でいいですかね？ -- Tor
 
 最初の修正です。
+So the first case is
 
-Trac Issue No.860, catch / throw
-
-
+Trac Issue No.860, an issue with catch / throw and exception handling in MacRuby.
 
 <<click>>
 
@@ -392,12 +448,12 @@ Let me explain the reason.
 
 <<click>>
 
-'throw' pops an Exception from the stack.
+First, 'throw' pops an Exception from the stack.
 
 <<click>>
 
-MacRuby tries to pop an Exception when the rescue block ends, and
-causes an error!
+Then, when the rescue block ends, then MacRuby tries to pop another Exception from the stack. This causes an error since the stack is empty!
+TODO:修正したが、これでいいでしょうか --Tor
 
 <<click>>
 
@@ -407,15 +463,21 @@ The MacRuby implementation at that time assumed the following way of
 writing exception handling.
 
 しかし、Railsではこの前提が崩れてしまった。
+However, this assumption does not hold true in Rails.
 
 そのため動かなかった。
+So, this caused an error when running Rails on MacRuby.
 
 Before being fixed(60723bf~), 'throw' always popped the current Exception.
 
 このような実装になっているには理由があります。
+TODO: 今日の修正はここまでです。おやすみなさい。--Tor
 
 次のコードをみてください。catchの中にrescueがあります。
 このため、このコードでは
+Take a look at the following code. We have a rescue statement inside a catch block.
+
+Therefore, in the following code ... 
 
 If reached "end", pop Exception. However can't reach here in this case.
 
@@ -441,7 +503,7 @@ Fixed that MacRuby pop Exceptions if it only needs.(60723bf)
 
 <<click>>
 
-= #1192 Lookup Constants
+= #1192 Constant lookup
 
 それでは次の修正を説明します。
 

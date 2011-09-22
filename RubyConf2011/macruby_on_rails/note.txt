@@ -721,7 +721,10 @@ MacRuby もこのように動作します。
 さぁ、それではみなさんに実際の成果をお見せするときがきました。
 
 MacRuby で Rails を動作させます。
+Rails works on MacRuby.
+
 ここでは、Rails のバージョンは少し古いのですが 3.0.7 です。
+At this time, I use Rails version 3.0.7 that is bit old.
 
 <<click>>
 

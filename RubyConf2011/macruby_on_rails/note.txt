@@ -659,7 +659,7 @@ This error can be reproduced by this code.
 Let me explain this code sequentially from the top.
 
 1行目で、module Aを定義します。
-In line number one, module A is defined.
+In line number one, we module A is defined.
 
 2行目で、module Aに定数Bを定義します。
 In line number two, constant B is defined under module A.

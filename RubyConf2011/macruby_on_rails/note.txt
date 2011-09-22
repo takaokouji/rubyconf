@@ -767,5 +767,3 @@ But we have many things to complete.
 Local Variables:
 mode: rd
 End:
-
-テスト

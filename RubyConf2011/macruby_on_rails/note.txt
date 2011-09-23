@@ -2,26 +2,6 @@ title: "RubyConf 2011 MacRuby on Rails 発表原稿"
 author: "高尾宏治"
 date: "2011/09/28"
 
-= Fix slides at:
-
-Torさんへ、このTODOのところに私へのスライドの修正指示を書いてください。
-わかりました、そのうち書きます。--Tor
-
-TODO: これから修正します。
-すみません、スライドの修正については今後スライドに該当する現行の辺に書かせてください。
-Done: 以下は修正が完了しています。
-21 (and the following slides):
- Employee Oneself (in blue frame) > Employee
- First: Employee Oneself > First: Employee
- Next: Employee Family > Next: Employee's Family
- Finally: Company
-31
- Library > System libraries
-40
- Not sure but it looks like "(I)Click". Maybe you need to change it to "(1)Click" ?
- ie. "i" to "1" (one)
- -> フォントを修正して数字の1に見えるようにしました。
- 
 = はじめに
 
 これはRubyConf2011で私が発表する「MacRuby on Rails」の原稿です。
@@ -55,7 +35,8 @@ I am a Research Engineer at Network Applied Communication Laboratory Ltd.
 In Japan, my company is famous in connection with the Ruby programming language.
 
 As for me, my work includes anything related to system integration.
-For example, system design, programming, planning and meeting with the customers.
+For example,
+system design, programming, planning and meeting with the customers.
 
 And I work as the leader of small team.
 
@@ -321,15 +302,18 @@ So, if we look at the whole... well, then it looks like this.
 
 = Cocoa
 
-Mac OS X には、 Cocoa という Objective-C で書かれたライブラリがあります
-On Mac OS X we have a library called Cocoa which is written in Objective-C.。
+Mac OS X には、 Cocoa という Objective-C で書かれたライブラリがあります。
+On Mac OS X,
+we have some libraries called Cocoa which are written in Objective-C.
 
 Cocoa には、Mac OS X の機能のほぼ全て（例えば、GUI、画像・動画などのマ
 ルチメディア、テキストの読み上げなど）が含まれています。
-The Cocoa library includes more or less all the features of Mac OS X, for instance a GUI toolkit, multimedia processing, text-to-speech and so on.
+The Cocoa includes more or less all the features of Mac OS X,
+for instance a GUI toolkit, multimedia processing, text-to-speech and so on.
 
 Mac OS Xのアプリケーションの多くはCocoaを使って開発されています。
 The majority of Mac OS X applications are developed using Cocoa.
+
 <<click>>
 
 = MacRuby x Cocoa
@@ -337,7 +321,7 @@ The majority of Mac OS X applications are developed using Cocoa.
 MacRuby は Cocoa を簡単に利用できます。
 実際、Cocoa を使うために MacRuby が存在しているといってもいいでしょう。
 It is easy to use Cocoa in MacRuby.
-Actually we could say, that MacRuby exists in order to allow us to use Cocoa.
+Actually, we could say that MacRuby exists in order to allow us to use Cocoa.
 
 <<click>>
 
@@ -361,10 +345,10 @@ The purpose of the "framework" method is to load system libraries such as Cocoa.
 <<click>>
 
 実際に Cocoa の機能を使っているのはこの部分です。
-This is the part where we are actually using Cocoa's functionality.
 ファイル名を指定して、サウンドファイルのインスタンスを生成します。
-We specify a filename and we generate an instance of a sound file.
 そして、playメソッドを呼び出してサウンドを再生しています。
+This is the part where we are actually using Cocoa's functionality.
+We specify a filename and we generate an instance of a sound file.
 And then we call the "play" method to play back the sound.
 
 <<click>>
@@ -372,7 +356,7 @@ And then we call the "play" method to play back the sound.
 = HelloMacRuby
   
 次は、 GUI アプリケーションのサンプルプログラムです。
-Next we have a sample program showing a GUI application.
+Next, we have a sample program showing a GUI application.
 
 名前は HelloMacRuby とします。
 Let's call it HelloMacRuby.
@@ -468,7 +452,8 @@ And ... showing the welcome page.
 このように、なにも修正していないRailsをMacRubyで動作させることができます。
 So, it is currently possible to run a Rails application on MacRuby without modifying Rails.
 
-However, it wasn't always like this. Let's travel back in time!
+However, it wasn't always like this.
+Let's travel back in time!
 
 <<click>>
 
@@ -495,7 +480,8 @@ generators won't work..."
 
 <<click>>
 
-I tried to create a Rails project. And it actually worked!?
+I tried to create a Rails project.
+And it actually worked!?
 
 <<click>>
 
@@ -636,17 +622,14 @@ TODO:
 それでは次の修正を説明します。
 Next, let's look at another example of how I fixed MacRuby, the 
 
-Trac Issue number 1192 (one one nine two), which is related to Constant Lookup in MacRuby
+Trac Issue number 1192 (one one nine two),
+which is related to Constant Lookup in MacRuby.
 
-これは次の問題(Issue)です。
-The issue was that MacRuby failed to ...
-
-module_evalやclass_evalをつかったような、いくつかのケースで定数の探索に
-失敗してしまう。
- ... correctly look up constants in a number of situations when you used module_eval and class_eval.
- TODO:要確認です。そして２つの文書を一つにまとめてもいいとおもいます。--Tor
-
-Almost can't lookup nested constants.
+これはmodule_evalやclass_evalをつかったような、いくつかのケースで定数の探索に
+失敗してしまうという問題です。
+The issue was that MacRuby failed
+to correctly look up constants in a number of situations
+when you used module_eval and class_eval.
 
 <<click>>
 

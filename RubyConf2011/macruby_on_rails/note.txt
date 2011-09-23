@@ -334,9 +334,15 @@ Mac OS Xのアプリケーションの多くはCocoaを使って開発されて�
 
 = MacRuby x Cocoa
 
+TODO: いまからここを書きます。
+
 <<click>>
 
 = MacRuby x Cocoa
+
+TODO:
+
+<<click>>
 
 = HelloMacRuby
 

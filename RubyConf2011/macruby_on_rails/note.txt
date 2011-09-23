@@ -5,9 +5,10 @@ date: "2011/09/28"
 = Fix slides at:
 
 Torさんへ、このTODOのところに私へのスライドの修正指示を書いてください。
+わかりました、そのうち書きます。--Tor
 
 TODO: これから修正します。
-
+すみません、スライドの修正については今後スライドに該当する現行の辺に書かせてください。
 Done: 以下は修正が完了しています。
 21 (and the following slides):
  Employee Oneself (in blue frame) > Employee
@@ -53,11 +54,8 @@ Please call me Kouji.
 I am a Research Engineer at Network Applied Communication Laboratory Ltd.
 In Japan, my company is famous in connection with the Ruby programming language.
 
-As for me, the work about system integrator does anything. 
-For example, system design, programming, planning and negotiation.
-TOR_TODO: これは日本語だったらどういういみかな。 --Tor
--> 私はシステムインテグレータとして行うことはなんでもやります。
-例えば、システムデザイン、プログラミング、計画、顧客との打合せです。
+As for me, my work includes anything related to system integration.
+For example, system design, programming, planning and meeting with the customers.
 
 And I work as the leader of small team.
 
@@ -323,25 +321,30 @@ So, if we look at the whole... well, then it looks like this.
 
 = Cocoa
 
-Mac OS X には、 Cocoa という Objective-C で書かれたライブラリがあります。
+Mac OS X には、 Cocoa という Objective-C で書かれたライブラリがあります
+On Mac OS X we have a library called Cocoa which is written in Objective-C.。
 
 Cocoa には、Mac OS X の機能のほぼ全て（例えば、GUI、画像・動画などのマ
 ルチメディア、テキストの読み上げなど）が含まれています。
+The Cocoa library includes more or less all the features of Mac OS X, for instance a GUI toolkit, multimedia processing, text-to-speech and so on.
 
 Mac OS Xのアプリケーションの多くはCocoaを使って開発されています。
-
+The majority of Mac OS X applications are developed using Cocoa.
 <<click>>
 
 = MacRuby x Cocoa
 
 MacRuby は Cocoa を簡単に利用できます。
 実際、Cocoa を使うために MacRuby が存在しているといってもいいでしょう。
+It is easy to use Cocoa in MacRuby.
+Actually we could say, that MacRuby exists in order to allow us to use Cocoa.
 
 <<click>>
 
 = MacRuby x Cocoa
 
 それでは、MacRubyからCocoaの使用例を見てみましょう。
+Well then, let's look at an example of how we can use Cocoa from MacRuby.
 
 <<click>>
 
@@ -351,38 +354,50 @@ This is a sample program that plays a sound.
 <<click>>
 
 MacRubyにはframeworkというメソッドが定義されています。
+MacRuby defines a method called "framework".
 このメソッドは、Cocoa などの system libraries をロードするためのメソッドです。
+The purpose of the "framework" method is to load system libraries such as Cocoa.
 
 <<click>>
 
 実際に Cocoa の機能を使っているのはこの部分です。
+This is the part where we are actually using Cocoa's functionality.
 ファイル名を指定して、サウンドファイルのインスタンスを生成します。
+We specify a filename and we generate an instance of a sound file.
 そして、playメソッドを呼び出してサウンドを再生しています。
+And then we call the "play" method to play back the sound.
 
 <<click>>
 
 = HelloMacRuby
-
+  
 次は、 GUI アプリケーションのサンプルプログラムです。
+Next we have a sample program showing a GUI application.
+
 名前は HelloMacRuby とします。
+Let's call it HelloMacRuby.
 
 <<click>>
 
 「Push me!」ボタンをクリックします。
+So, we click the "Push me!" button.
 
 <<click>>
 
 TODO: ここを書いているところ
 
 すると、テキストフィールドに"Hello,MacRuby!"と表示します。
+And this displays "Hello, MacRuby" in the text field.
 
 このような簡単なプログラムです。
+So, this is just a simple example program.
 
 <<click>>
 
 = HelloMacRuby (part 2)
 
 XcodeHelloMacRuby の作成
+Creating XcodeHelloMacRuby
 
 <<click>>
 
@@ -418,11 +433,9 @@ Starting up the server.
 And ... showing the welcome page.
 
 このように、なにも修正していないRailsをMacRubyで動作させることができます。
-So it is currently possible to run a Rails application on MacRuby.
-TOR_TODO: この解釈でいいですかね？--Tor
--> ここは少し違うような気がします。Ruby処理系でRailsを動かす場合、いくつかRails自体を修正する必要があります。それをしなくてもMacRubyでRailsをここまで動かすことが出来る。ということが伝えたいです。
+So, it is currently possible to run a Rails application on MacRuby without modifying Rails.
 
-Let's travel back in time!
+However, it wasn't always like this. Let's travel back in time!
 
 <<click>>
 
@@ -449,7 +462,7 @@ generators won't work..."
 
 <<click>>
 
-I tried to create a Rails project. And it worked!?
+I tried to create a Rails project. And it actually worked!?
 
 <<click>>
 
@@ -499,14 +512,13 @@ to do so for cRuby.
 = #860 catch/throw
 
 私は私がMacRubyを修正した箇所のうちのいくつかを紹介したいと思います。
-Now, I would like to discuss
-a couple of cases among the problems that I fixed in MacRuby.
+Now, I would like to discuss a couple the issues that I fixed in MacRuby.
 
 最初の修正です。
-So the first case is
+Let's have a look at the first case, which is ...
 
 Trac Issue No.860,
-an issue with catch / throw and exception handling in MacRuby.
+an issue with catch and throw and exception handling in MacRuby.
 
 <<click>>
 
@@ -536,6 +548,17 @@ TODO:
 
 The MacRuby implementation at that time assumed the following way of
 writing exception handling.
+SLIDE_TODO: 「MacRuby assumed a specific code structure for exception handling」をスライド７４に追加するといいと思います。
+
+The issue does not occur, as long as you don't break this assumption.
+
+With this exception handling structure, if we reach end, then it means that throw was NOT executed. On the other hand if throw is executed, then we break out of the begin rescue end block before we reach end.
+
+In other words, this structure ensures that you never pop more than one exception from the stack.
+SLIDE_TODO: "If reached 'end', pop Exception. However can't reach here in this case." > "If we reach 'end', it means that the throw statement was not executed."
+SLIDE_TODO: "So we should pop Exception when we perform 'throw'" > "And if 'throw' is executed, then we won't reach 'end'.
+SLIDE_TODO: Add "This means that we never pop more than one exception from the stack".
+TODO:この辺りの訂正案は流れと内容を大きく変えるので、要確認だと思います。そして、スライドの切り替えとの調節が必要かみしれないですね。--Tor
 
 しかし、Railsではこの前提が崩れてしまった。
 However, this assumption does not hold true in Rails.
@@ -545,25 +568,11 @@ So, this caused an error when running Rails on MacRuby.
 
 Before being fixed(60723bf~), 'throw' always popped the current Exception.
 
-このような実装になっているには理由があります。
-TOR_TODO: 今日の修正はここまでです。おやすみなさい。--Tor
-
-次のコードをみてください。catchの中にrescueがあります。
-このため、このコードでは
-Take a look at the following code.
-We have a rescue statement inside a catch block.
-
-Therefore, in the following code ... 
-
-If reached "end", pop Exception. However can't reach here in this case.
-
-So we should pop Exception when we perform "throw".
-
-Railsでは発生しました。
-
 <<click>>
 
 実装はこのようになっています。
+The MacRuby implementation at that time was like this.
+TODO:この辺はスライド７８だと思います（vm.cppを引用したところ）
 
 <<click>>
 
@@ -571,7 +580,7 @@ Railsでは発生しました。
 
 TODO:
 
-Fixed that MacRuby pop Exceptions if it only needs.(60723bf)
+I changed the implementation so that MacRuby only pop Exceptions if it needs to.(60723bf)
 
 <<click>>
 
@@ -586,13 +595,17 @@ TODO:
 = #1192 Constant lookup
 
 それでは次の修正を説明します。
+Next, let's look at another example of how I fixed MacRuby, the 
 
-Trac Issue number 860 (eight hundred and sixty), Lookup Constants
+Trac Issue number 1192 (one one nine two), which is related to Constant Lookup in MacRuby
 
 これは次の問題(Issue)です。
+The issue was that MacRuby failed to ...
 
 module_evalやclass_evalをつかったような、いくつかのケースで定数の探索に
 失敗してしまう。
+ ... correctly look up constants in a number of situations when you used module_eval and class_eval.
+ TODO:要確認です。そして２つの文書を一つにまとめてもいいとおもいます。--Tor
 
 Almost can't lookup nested constants.
 

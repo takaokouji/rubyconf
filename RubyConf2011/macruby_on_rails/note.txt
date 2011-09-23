@@ -530,13 +530,13 @@ to do so for cRuby.
 
 = #860 catch/throw
 
-私は私がMacRubyを修正した箇所のうちのいくつかを紹介したいと思います。
+私がMacRubyを修正した箇所のうちのいくつかを紹介したいと思います。
 Now, I would like to discuss a couple the issues that I fixed in MacRuby.
 
 最初の修正です。
 Let's have a look at the first case, which is ...
 
-Trac Issue No.860,
+Trac Issue number 860(eight six zero),
 an issue with catch and throw and exception handling in MacRuby.
 
 <<click>>
@@ -551,69 +551,236 @@ Let me explain the reason.
 
 <<click>>
 
-First, 'throw' pops an Exception from the stack.
+= Exception
+
+まず、MacRuby における例外処理の実現方法について説明します。
 
 <<click>>
 
-Then, when the rescue block ends,
-then MacRuby tries to pop another Exception from the stack.
-This causes an error since the stack is empty!
+このコードを見てください。
+このプログラムではraiseとrescueを2回行っています。
+
+このプログラムをMacRubyで実行したときの様子を見てみましょう。
 
 <<click>>
 
-= Exception Stack
-
-TODO: ここを書いています。
+2行目で、最初の例外が発生します。
+このとき、MacRuby ではスタックに発生した例外を格納します。
+このスタックを例外スタックと呼びます。
 
 <<click>>
 
-= #860 catch/throw (part 2)
+3行目で、その例外をrescueして、処理を続けています。
 
-TODO:
+5行目で、次の例外が発生します。
+それを例外スタックに追加します。
 
-The MacRuby implementation at that time assumed the following way of
-writing exception handling.
-SLIDE_TODO: 「MacRuby assumed a specific code structure for exception handling」をスライド７４に追加するといいと思います。
+6行目で、その例外をrescueして、処理を続けています。
 
+<<click>>
+
+7行目で、rescue節を含むendに到達したので例外スタックから例外を1つ取り除きます。
+
+<<click>>
+
+8行目で、7行目と同じように例外スタックから例外を1つ取り除きます。
+
+これで全ての例外を処理できました。
+例外スタックは空の状態です。
+
+このように、MacRuby では例外をスタックに格納して処理しています。
+
+<<click>>
+
+= Exception and catch / throw
+
+次に、例外処理と catch / throw を組み合わせたときの実現方法を説明します。
+
+<<click>>
+
+このコードを見てください。
+このプログラムでは例外が発生したあとで、throwによってcatchまでジャンプ
+しています。
+
+先ほどと同様に、Exception Stackの内容に着目しながら、このプログラムを
+MacRubyで実行したときの様子を見てみましょう。
+
+<<click>>
+
+1行目で、:fooを指定してcatchを実行しています。
+catchに指定したブロックの中で:fooを指定してthrowを実行すると、
+catchのブロックを抜け出すことが出来ます。
+
+3行目で、次の例外が発生します。それを例外スタックに追加します。
+
+4行目で、その例外をrescueして、処理を続けています。
+
+<<click>>
+
+5行目で、:fooを指定してthrowを呼び出しています。
+その結果、catchのブロックを抜け出します。
+このとき、例外スタックから例外を1つ取り除きます。
+
+<<click>>
+
+このように、MacRubyでは、throwでも例外スタックから例外を取り除きます。
+
+<<click>>
+
+= throw
+
+念のため、throwの実装を見てみましょう。
+TOR_TODO: The MacRuby implementation at that time was like this.
+
+throwの実装は ソースコードvm.cppの4321行付近にあります。
+throwはC++で実装されています。
+
+<<click>>
+
+current_exception()関数は、例外スタックの一番上に積まれている例外を返します。
+
+<<click>>
+
+pop_current_exception()関数は、例外スタックから例外を一つ取り除きます。
+
+<<click>>
+
+= #860 catch/throw
+
+それでは、もう一度、今回の問題の再現コードを見てみましょう。
+
+<<click>>
+
+先ほどと同様に、Exception Stackの内容に着目しながら、このプログラムを
+MacRubyで実行したときの様子を見てみましょう。
+
+<<click>>
+
+2行目で、例外が発生します。
+それを例外スタックに追加します。
+
+3行目で、その例外をrescueして、処理を続けています。
+
+<<click>>
+
+4行目で、catch と throw を実行します。
+throw の実行時に、例外スタックから例外を1つ取り除きます。
+そして、例外スタックは空の状態になります。
+
+<<click>>
+
+5行目で、rescue節を含むendに到達したので例外スタックから例外を1つ取り除こうとします。
+しかし、例外スタックは空になっています。
+
+<<click>>
+
+その結果、abort してしまうのです。
+
+<<click>>
+
+みなさんもお気付きのように、この問題の原因は 4 行目の throw で例外を取り除いてしまったことです。
+
+TOR_TODO: Torさんに追加していただいた以下の記述をどこに使おうか迷っています。
+Torさんと相談して決めたいと思います。
+----- ここから -----
 The issue does not occur, as long as you don't break this assumption.
 
 With this exception handling structure, if we reach end, then it means that throw was NOT executed. On the other hand if throw is executed, then we break out of the begin rescue end block before we reach end.
 
 In other words, this structure ensures that you never pop more than one exception from the stack.
-SLIDE_TODO: "If reached 'end', pop Exception. However can't reach here in this case." > "If we reach 'end', it means that the throw statement was not executed."
-SLIDE_TODO: "So we should pop Exception when we perform 'throw'" > "And if 'throw' is executed, then we won't reach 'end'.
-SLIDE_TODO: Add "This means that we never pop more than one exception from the stack".
-TODO:この辺りの訂正案は流れと内容を大きく変えるので、要確認だと思います。そして、スライドの切り替えとの調節が必要かみしれないですね。--Tor
 
 しかし、Railsではこの前提が崩れてしまった。
 However, this assumption does not hold true in Rails.
 
 そのため動かなかった。
 So, this caused an error when running Rails on MacRuby.
-
-Before being fixed(60723bf~), 'throw' always popped the current Exception.
-
-<<click>>
-
-実装はこのようになっています。
-The MacRuby implementation at that time was like this.
-TODO:この辺はスライド７８だと思います（vm.cppを引用したところ）
+----- ここまで -----
 
 <<click>>
 
-= #860 catch/throw (part 3)
+= How to fix
 
-TODO:
-
-I changed the implementation so that MacRuby only pop Exceptions if it needs to.(60723bf)
+この問題の修正内容を、修正後のコードの動作にそって説明します。
 
 <<click>>
 
-= #860 catch/throw (part 4)
+3行目までは、先ほどと同じように動作します。
 
-TODO:
+<<click>>
 
-ここで説明する。
+4行目で、まず、catchを実行したときに、例外スタックの一番上に積まれている例外を記録しておきます。ここでは例外"A"を記録します。
+
+<<click>>
+
+次に、throwを実行したときに、catchで記録した例外と、例外スタックの一番上に積まれている例外を比較します。
+それらが等しければ何もしません。
+それらが違っていたら例外スタックから例外を取り除きます。
+ここでは、どちらも例外"A"なので何もしません。
+
+<<click>>
+
+5行目で、例外スタックから例外を1つ取り除きます。
+そして、例外スタックは空の状態になります。
+
+<<click>>
+
+= How to fix (part 2)
+
+これをthrowに実装したのがこのコードです。
+
+<<click>>
+
+この部分で、catchで記録した例外と例外スタックの一番上に積まれている例外を比較しています。
+
+<<click>>
+
+この部分は修正前と同様に、例外スタックの一番上に積まれている例外を取り除いています。
+
+<<click>>
+
+= #860 Fixed
+
+最後に、もう少し複雑なコードで修正後のMacRubyの動作を確認してみましょう。
+
+<<click>>
+
+2行目で、例外が発生します。
+それを例外スタックに追加します。
+
+3行目で、その例外をrescueして、処理を続けています。
+
+<<click>>
+
+4行目で、catchを実行します。このとき、例外"A"を記録します。
+
+<<click>>
+
+6行目で、例外が発生します。
+それを例外スタックに追加します。
+
+<<click>>
+
+7行目で、その例外をrescueして、処理を続けています。
+
+8行目で、throwを実行します。
+このとき、catchで記録した例外"A"と例外スタックの一番上の例外"B"を比較します。
+
+<<click>>
+
+それぞれが異なるため、例外"B"を例外スタックから取り除きます。
+
+<<click>>
+
+もう一度、catchで記録した例外"A"と例外スタックの一番上の例外"A"を比較します。
+それぞれが等しいため何もしません。
+
+そして、catchのブロックを抜けます。
+
+<<click>>
+
+11行目で、例外スタックから例外を1つ取り除きます。
+
+私は、このようにして、この問題を修正しました。
 
 <<click>>
 

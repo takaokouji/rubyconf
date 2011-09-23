@@ -935,24 +935,42 @@ TODO: 左側は行数がありません。--Tor
 
 Blockを渡す場合について、上から順に説明します。
 
-First, about performing class_eval with Block. 
+First, I'll explain about calling class_eval with a Block.
 Let me explain this code sequentially from the top.
 
 1行目で、module Aを定義します。
+On line 1, we define module A.
 2行目で、定数CONSTを定義します。
+On line 2, we define the constant CONST
 3行目で、メソッドfを定義します。
+On line 3, we define method f.
 4行目で、class_evalをブロックを渡して呼び出します。
+On line 4, we pass the block to class_eval.
 5行目で、定数CONSTを標準出力に出力します。
+On line 5, we print the content of the constant CONST to the standard output.
 6行目で、class_evalに渡すブロックの終端を指定します。
+On line 6, we close the class_eval block.
 実際には、4〜6行目はメソッドfを呼び出したときに実行されます。
+So, when we call method f, then line four to six gets executed.
+
+TODO: このような徹底的な動作の列強を毎回する必要はない気がします。要点だけに絞ったほうがいいかもしれないです。--Tor
 
 少し飛ばします。
+Let's jump a bit forward to line 10.
+
 10行目で、class Kを定義します。
+In line 10, we define class K.
+
 11行目で、class Kに定数CONSTを定義します。
+In line 11, we define another constant called CONST, but this time inside class K.
 12行目で、extend Aを実行します。
+As you can see on line 12, we extend class K with module A.
 13行目で、module Aのメソッドfを呼び出します。
+On line 13, we call module A's f method.
 
 その結果、4〜6行目が実行されます。
+As a result, the code in line 4 to 6 is called.
+
 
 このときの定数CONSTを最初に探索する範囲がわかりますか？
 
@@ -1127,23 +1145,25 @@ At this time, I use Rails version 3.0.7 that is bit old.
 Actually, MacRuby aborts if you click "About your application’s environment" link in Welcome page.
 
 Rails を動かすのは定数探索よりも難しい問題ですね。
-Hmm, working Rails on MacRuby is more difficult than to implement
-lexical constant lookup, isn't it?
+Hmm, working Rails on MacRuby is more difficult than to implement lexical constant lookup, isn't it?
 
 <<click>>
 
-= MacRuby trip by the train continues...
+= The MacRuby train trip continues ...
 
 MacRuby による電車の旅はまだまだ続きます。
+The MacRuby train trip continues ...
+
 ぜひ、みなさんも一緒に旅をしましょう。
+Everyone, please get on board.
 
 <<click>>
 
-This is MacRuby project URL.
+This is the URL for the MacRuby project's homepage.
 
 <<click>>
 
-This is MacRuby official twitter account.
+This is MacRuby's official twitter account.
 
 <<click>>
 
@@ -1151,7 +1171,7 @@ MacRuby is on GitHub.
 
 <<click>>
 
-This is MacRuby Mailing List address.
+This is the MacRuby Mailing List's address.
 
 <<click>>
 
@@ -1159,44 +1179,52 @@ This is MacRuby Mailing List address.
 
 <<click>>
 
-MacRuby
-A unique blend of Ruby 1.9 and Objective-C.
+MacRuby is a unique blend of Ruby 1.9 and Objective-C.
 The goal is to be 100% compatible with Ruby 1.9.
 
 <<click>>
 
 MacRuby on Rails
-We became to show the Welcome Page.
-But we have many things to complete.
+We're now able to show the default Rails welcome page.
+But there is still a lot to do.
 
 <<click>>
 
 = Q & A
 
 それでは、何か質問はありますか？
+And now, I would like to answer any questions you have.
+
 質問される方は、できれば、ゆっくりとシンプルなものをお願いします。
+If you have a question, please ask me, but if possible please speak slowly.
 
 <<click>>
 
 = Acknowledgement
 
 最後に、
+Last of all,
 
 このプレゼンテーションの機会を与えてくださった RubyConf の運営者の方に
 感謝いたします。
+I would like to express my gratitude toward the RubyConf hosts and organizers for giving me the opportunity to give this presentation.
 
 <<click>>
 
 私の少ない英語力を補ってくれた同僚の Tor に感謝いたします。
+And, I would like to thank my co-worker Tor Yamamoto-Sorensen (@shakaijin) who helped me with this presentation.
+TODO:
 
 <<click>>
 
 そして、私のつたない英語でのプレゼンテーションにつきあってくださった会
 場のみなさまに感謝いたします。
+And finally, I would like to thank my everyone here, for patiently listening to this presentation, despite my clumsy English.
 
 <<click>>
 
 ありがとうござました。
+Thank you very much.
 
 <<click>>
 

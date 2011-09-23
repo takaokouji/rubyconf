@@ -642,45 +642,63 @@ If you run this code, then the following error will occur.
 <<click>>
 
 Object.class_eval { B } の行を見てください。
+Please look at the line with Object dot class_eval.
 
 定数Bを探すときcRubyでは、最初にこの枠の範囲を対象にします。
+In cRuby, when we look for the constant B, we start looking within the green box.
 そして、定数Bを見つけます。
+So, we are able to find constant B.
 
 <<click>>
 
 しかし、MacRubyではclass_evalのレシーバであるObjectからしか探索しませんでした。
 当然、Objectには定数Bは定義されていません。その結果、定数Bの探索に失敗します。
-
-can't lookup Constant B assumes lookup it from Object
+However, in the MacRuby, at that time, we only looked within class_eval's receiver object.
+And since constant B isn't defined there, the constant lookup would fail in MacRuby.
 
 <<click>>
 
 = #1192 Constant lookup (part 2)
 
 この問題を理解するには、Rubyにおける定数の探索のやり方を詳しく知る必要があります。そしてまた、それはRubyの言語仕様の中でもとても難しい問題の一つです。
+To really understand this issue, you must have a detailed understanding of how constant lookup works in Ruby. And this is one of the parts of Ruby's language specification that quite hard to understand.
 
 なお、定数探索の詳細を知っておかなくても多くの場合に困りません。
+And in most cases, you can get along quite fine without knowing the details of constant lookups in Ruby.
 
 <<click>>
 
 まずはこのコードを見てください。
+Let's have a look at this code.
 
 上から順番に説明します。
+We'll look at it from the top and down.
 
 1行目で、module Aを定義します。
+In line 1, we begin the definition of module A.
+
 2行目で、module Bを定義します。
+And in line 2, we begin the definition of module B.
+
 3行目で、module Bに定数CONSTを定義します。
+In line 3, we define a constant called CONST in module B.
+
 4行目で、トップレベルのmodule A、つまり1行目で定義したmodule Aを再定義します。
+In line 4, we re-open the top-level module A, in other words, the module A that we defined in line 1.
 5行目で、定数CONSTを標準出力に出力します。
+And finally, in line 5, we print the contents of the constant CONST to the standard output.
 
 <<click>>
 
 このとき、cRubyではこの枠の範囲から定数CONSTを探索します。
+In this example, cRuby would look for the constant CONST within the green frame.
 そして、module Bに定義された定数CONSTを見つけます。
+And, cRuby would find the constant CONST that is defined in module B.
 
 <<click>>
 
 この枠の範囲を Lexical Scope といいます。
+We call the scope represented by the green frame for "Lexical Scope"
 
 また、本プレゼンテーションでは Lexical Scope から定数を探索することを
 Lexical Constant Lookupと呼びます。

@@ -334,25 +334,55 @@ Mac OS Xのアプリケーションの多くはCocoaを使って開発されて�
 
 = MacRuby x Cocoa
 
-TODO: いまからここを書きます。
+MacRuby は Cocoa を簡単に利用できます。
+実際、Cocoa を使うために MacRuby が存在しているといってもいいでしょう。
 
 <<click>>
 
 = MacRuby x Cocoa
 
-TODO:
+それでは、MacRubyからCocoaの使用例を見てみましょう。
+
+<<click>>
+
+これは、サウンドを再生するサンプルプログラムです。
+This is a sample program that plays a sound.
+
+<<click>>
+
+MacRubyにはframeworkというメソッドが定義されています。
+このメソッドは、Cocoa などの system libraries をロードするためのメソッドです。
+
+<<click>>
+
+実際に Cocoa の機能を使っているのはこの部分です。
+ファイル名を指定して、サウンドファイルのインスタンスを生成します。
+そして、playメソッドを呼び出してサウンドを再生しています。
 
 <<click>>
 
 = HelloMacRuby
 
-TODO:
+次は、 GUI アプリケーションのサンプルプログラムです。
+名前は HelloMacRuby とします。
+
+<<click>>
+
+「Push me!」ボタンをクリックします。
+
+<<click>>
+
+TODO: ここを書いているところ
+
+すると、テキストフィールドに"Hello,MacRuby!"と表示します。
+
+このような簡単なプログラムです。
 
 <<click>>
 
 = HelloMacRuby (part 2)
 
-TODO:
+XcodeHelloMacRuby の作成
 
 <<click>>
 

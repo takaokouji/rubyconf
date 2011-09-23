@@ -321,13 +321,22 @@ So, if we look at the whole... well, then it looks like this.
 
 <<click>>
 
-= MacRuby x Cocoa
+= Cocoa
 
-TODO:
+Mac OS X には、 Cocoa という Objective-C で書かれたライブラリがあります。
 
-This is a sample program that plays a sound.
+Cocoa には、Mac OS X の機能のほぼ全て（例えば、GUI、画像・動画などのマ
+ルチメディア、テキストの読み上げなど）が含まれています。
+
+Mac OS Xのアプリケーションの多くはCocoaを使って開発されています。
 
 <<click>>
+
+= MacRuby x Cocoa
+
+<<click>>
+
+= MacRuby x Cocoa
 
 = HelloMacRuby
 

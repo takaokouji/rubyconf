@@ -829,7 +829,7 @@ the constant lookup would fail in MacRuby.
 
 <<click>>
 
-= #1192 Constant lookup (part 2)
+= Lexical Constant Lookup
 
 この問題を理解するには、Rubyにおける定数の探索のやり方を詳しく知る必要があります。そしてまた、それはRubyの言語仕様の中でもとても難しい問題の一つです。
 To really understand this issue,
@@ -884,21 +884,22 @@ We call the scope represented by the green frame for "Lexical Scope"
 
 また、本プレゼンテーションでは Lexical Scope から定数を探索することを
 Lexical Constant Lookupと呼びます。
-And here, for the sake of this presentation, I am going to refer to the lookup of constants within Lexical Scope as "Lexical Constant Lookup".
+And here, for the sake of this presentation,
+I am going to refer to the lookup of constants within Lexical Scope as "Lexical Constant Lookup".
 
 <<click>>
 
+= But...
+
 当時のMacRubyには、Lexical Constant Lookup が実装されていませんでした。
 At the time, MacRuby had not implemented Lexical Constant Lookup.
-My patch (in 6b101bd~) added Lexical Constant Lookup to MacRuby
-SLIDE_TODO: "Before fixed (6b101bd~), didn't implement
-the Lexical Constant Lookup" > "6b101bd~ added Lexical Constant Lookup to MacRuby"
 
 <<click>>
 
 このコードの場合だと、5行目では、module Aからしか定数CONSTを探索しませ
 んでした。
-In this code on line 5, MacRuby only looks for the constant CONST within module A.
+In this code on line 5,
+MacRuby only looks for the constant CONST within module A.
 
 <<click>>
 
@@ -910,50 +911,56 @@ Therefore, CONST cannot be found.
 = Constant Lookup is complex
 
 次はclass_evalを使った例です。
-Next we have an example with class_eval.
+Next,
+we have an example with class_eval.
 
 class_evalを使うと、定数探索はもっと複雑になります。
 Constant lookup becomes even more complex when we use class_eval.
 
 class_evalに文字列を渡すか、それともブロックを渡すかで結果が異なります。
-The behavior changes whether we pass a string or a block as the argument to class_eval.
+The behavior changes
+whether we pass a block or a string as the argument to class_eval.
 
-左が文字列を渡しています。
+左がブロックを渡しています。
 In the code example on the left hand we pass a block.
-TODO: スライドの左側はブロックですので、ここもブロックではないでしょうか？--Tor
 
-右がブロックを渡しています。
+右が文字列を渡しています。
 And in the right hand example we pass a string.
 
 それ以外の違いはありません。
 Except for the different arguments, the two examples are identical.
-TODO: 左側は行数がありません。--Tor
 
 <<click>>
 
 = class_eval(&Block)
 
 Blockを渡す場合について、上から順に説明します。
-
 First, I'll explain about calling class_eval with a Block.
 Let me explain this code sequentially from the top.
 
 1行目で、module Aを定義します。
 On line 1, we define module A.
+
 2行目で、定数CONSTを定義します。
 On line 2, we define the constant CONST
+
 3行目で、メソッドfを定義します。
 On line 3, we define method f.
+
 4行目で、class_evalをブロックを渡して呼び出します。
 On line 4, we pass the block to class_eval.
+
 5行目で、定数CONSTを標準出力に出力します。
 On line 5, we print the content of the constant CONST to the standard output.
+
 6行目で、class_evalに渡すブロックの終端を指定します。
 On line 6, we close the class_eval block.
+
 実際には、4〜6行目はメソッドfを呼び出したときに実行されます。
 So, when we call method f, then line four to six gets executed.
 
-TODO: このような徹底的な動作の列強を毎回する必要はない気がします。要点だけに絞ったほうがいいかもしれないです。--Tor
+TOR_TODO: このような徹底的な動作の列強を毎回する必要はない気がします。要点だけに絞ったほうがいいかもしれないです。--Tor
+-> 了解しました。どのようにするのがいいか、相談させてください。　-Kouji
 
 少し飛ばします。
 Let's jump a bit forward to line 10.
@@ -962,15 +969,17 @@ Let's jump a bit forward to line 10.
 In line 10, we define class K.
 
 11行目で、class Kに定数CONSTを定義します。
-In line 11, we define another constant called CONST, but this time inside class K.
+In line 11, we define another constant called CONST,
+but this time inside class K.
+
 12行目で、extend Aを実行します。
 As you can see on line 12, we extend class K with module A.
+
 13行目で、module Aのメソッドfを呼び出します。
 On line 13, we call module A's f method.
 
 その結果、4〜6行目が実行されます。
 As a result, the code in line 4 to 6 is called.
-
 
 このときの定数CONSTを最初に探索する範囲がわかりますか？
 
@@ -989,7 +998,6 @@ Therefore, 'p method' outputs the string "A's CONST".
 = class_eval(String)
 
 次に、文字列を渡す場合についてです。
-
 Next, about performing class_eval with String.
 
 先ほどのものとの違いは4〜6行目だけです。
@@ -1207,7 +1215,8 @@ Last of all,
 
 このプレゼンテーションの機会を与えてくださった RubyConf の運営者の方に
 感謝いたします。
-I would like to express my gratitude toward the RubyConf hosts and organizers for giving me the opportunity to give this presentation.
+I would like to express my gratitude toward the RubyConf hosts and organizers
+for giving me the opportunity to give this presentation.
 
 <<click>>
 
@@ -1219,7 +1228,10 @@ TODO:
 
 そして、私のつたない英語でのプレゼンテーションにつきあってくださった会
 場のみなさまに感謝いたします。
-And finally, I would like to thank my everyone here, for patiently listening to this presentation, despite my clumsy English.
+And finally,
+I would like to thank my everyone here,
+for patiently listening to this presentation,
+despite my clumsy English.
 
 <<click>>
 

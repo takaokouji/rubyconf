@@ -384,8 +384,6 @@ So, we click the "Push me!" button.
 
 <<click>>
 
-TODO: ここを書いているところ
-
 すると、テキストフィールドに"Hello,MacRuby!"と表示します。
 And this displays "Hello, MacRuby" in the text field.
 
@@ -396,14 +394,49 @@ So, this is just a simple example program.
 
 = HelloMacRuby (part 2)
 
-XcodeHelloMacRuby の作成
-Creating XcodeHelloMacRuby
+HelloMacRuby は Xcode というツールを使って作成します。
+Xcode は Mac OS X のアプリケーションを開発するための IDE です。
+残念ながら、最新の Xcode 4.1 は MacRuby に対応していません。
+次にリリースされる Xcode 4.2 は対応しています。
+Xcode 4.2 がリリースされるまで、もう少しお待ちください。
+
+<<click>>
+
+それでは、このプログラムを見てください。
+
+これが HelloMacRuby のメインプログラムです。
+Xcode に付属するテキストエディタでコーディングします。
+
+2行目で、テキストフィールドとやりとりするためのアクセサを定義しています。
+
+4行目で、Push me!ボタンが押されたときのイベントハンドラを定義しています。
+
+5行目で、テキストフィールドに"Hello,MacRuby!"をセットしています。
+
+<<click>>
+
+次は Xcode に付属する GUI エディタで View を作成します。
+
+<<click>>
+
+最後は、アクセサとテキストフィールド、ボタンとイベントハンドラを関連づけます。
+これも Xcode の GUI エディタで行います。
+このとき、ドラッグアンドドロップを使って直感的な操作で関連づけることが出来ます。
+
+これで HelloMacRuby は完成です。
+
+以上が MacRuby の説明です。
 
 <<click>>
 
 = MacRuby on Rails
 
-TODO:
+ここからが今日のメイントピックです。
+
+MacRuby on Rails
+
+これは、MacRuby で Ruby on Rails を動かすということです。
+that means Ruby on Rails works on MacRuby.
 
 <<click>>
 
@@ -539,6 +572,12 @@ First, 'throw' pops an Exception from the stack.
 Then, when the rescue block ends,
 then MacRuby tries to pop another Exception from the stack.
 This causes an error since the stack is empty!
+
+<<click>>
+
+= Exception Stack
+
+TODO: ここを書いています。
 
 <<click>>
 

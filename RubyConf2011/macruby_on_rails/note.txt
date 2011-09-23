@@ -884,37 +884,50 @@ We call the scope represented by the green frame for "Lexical Scope"
 
 また、本プレゼンテーションでは Lexical Scope から定数を探索することを
 Lexical Constant Lookupと呼びます。
+And here, for the sake of this presentation, I am going to refer to the lookup of constants within Lexical Scope as "Lexical Constant Lookup".
 
 <<click>>
 
 当時のMacRubyには、Lexical Constant Lookup が実装されていませんでした。
-
-Before fixed (6b101bd~), didn't implement the Lexical Constant Lookup
+At the time, MacRuby had not implemented Lexical Constant Lookup.
+My patch (in 6b101bd~) added Lexical Constant Lookup to MacRuby
+SLIDE_TODO: "Before fixed (6b101bd~), didn't implement
+the Lexical Constant Lookup" > "6b101bd~ added Lexical Constant Lookup to MacRuby"
 
 <<click>>
 
 このコードの場合だと、5行目では、module Aからしか定数CONSTを探索しませ
 んでした。
+In this code on line 5, MacRuby only looks for the constant CONST within module A.
 
 <<click>>
 
 その結果、定数CONSTを見つけることができませんでした。
+Therefore, CONST cannot be found.
 
 <<click>>
 
 = Constant Lookup is complex
 
 次はclass_evalを使った例です。
+Next we have an example with class_eval.
 
 class_evalを使うと、定数探索はもっと複雑になります。
+Constant lookup becomes even more complex when we use class_eval.
 
 class_evalに文字列を渡すか、それともブロックを渡すかで結果が異なります。
+The behavior changes whether we pass a string or a block as the argument to class_eval.
 
 左が文字列を渡しています。
+In the code example on the left hand we pass a block.
+TODO: スライドの左側はブロックですので、ここもブロックではないでしょうか？--Tor
 
 右がブロックを渡しています。
+And in the right hand example we pass a string.
 
 それ以外の違いはありません。
+Except for the different arguments, the two examples are identical.
+TODO: 左側は行数がありません。--Tor
 
 <<click>>
 

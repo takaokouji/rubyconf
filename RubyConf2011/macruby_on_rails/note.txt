@@ -1000,7 +1000,7 @@ Except for the different arguments, the two examples are identical.
 
 = class_eval(&Block)
 
-KOUJI_TODO:
+TOR_TODO:
 
 First, I'll explain about calling class_eval with a Block.
 Let me explain this code sequentially from the top.
@@ -1052,12 +1052,15 @@ On line 13, we call module A's f method.
 As a result, the code in line 4 to 6 is called.
 
 このときの定数CONSTを最初に探索する範囲がわかりますか？
+Do you understand a scope looking for constant CONST of this time first?
 
 <<click>>
 
 これは簡単ですね。
+This is easy.
 
-先ほどの説明と同様の理由から、この枠の範囲から最初に定数CONSTを探索します。
+この枠の範囲から最初に定数CONSTを探索します。
+we look for the constant CONST within the green frame.
 
 <<click>>
 
@@ -1067,31 +1070,49 @@ Therefore, 'p method' outputs the string "A's CONST".
 
 = class_eval(String)
 
-KOUJI_TODO:
+TOR_TODO:
 
 次に、文字列を渡す場合についてです。
 Next, about performing class_eval with String.
 
 先ほどのものとの違いは4〜6行目だけです。
+The difference with the thing like the point is only 4(four) to 6(six) lines.
 
 4行目で、class_evalを文字列を渡して呼び出します。
-5行目で、定数CONSTを標準出力に出力します。
-6行目で、ヒアドキュメントの終端を指定します。
-実際には、4〜6行目はメソッドfを呼び出したときに実行されます。
+On line 4, we pass the string to class_eval.
 
-そして、先ほどと同様に、13行目で、module Aのメソッドfを呼び出します。
+5行目で、定数CONSTを標準出力に出力します。
+On line 5, we print the content of the constant CONST to the standard output.
+
+6行目で、ヒアドキュメントの終端です。
+On line 6, we close the here document.
+
+そして、13行目で、module Aのメソッドfを呼び出します。
+Finally, on line 13, we call module A's f method.
 
 このときの定数CONSTを最初に探索する範囲がわかりますか？
+Do you understand a scope looking for constant CONST of this time first?
 
 <<click>>
 
 実はこの枠の範囲です。
+Actully, we look for the constant CONST within the green frame.
 
-これは、メソッドfの実行時に、class_evalに渡された文字列をパーズして、そ
-のときに定数の探索範囲を決定するからです。その結果、13行目の周辺が、定
-数の探索範囲となります。
+この理由を説明します。
+Let me explain this reason.
+
+メソッドfの実行時に、class_evalに渡された文字列をパーズ・解釈します。
+When we call module A's f method,
+we parse and evaluate the string that is passed class_eval.
+
+そのときに定数の探索範囲を決定します。
+Then, we determine a scope looking for constant CONST.
+
+その結果、13行目の周辺が、定数の探索範囲となります。
+Therefore, the scope determines around line 13.
 
 このような実行時にかわる範囲のことをdynamic scopeといいます。
+We call the scope represented by the green frame for "Dynamic Scope"
 
 <<click>>
 
@@ -1101,28 +1122,37 @@ Therefore, 'p method' outputs the string "K's CONST".
 
 = Constant Lookup is complex (part 2)
 
-KOUJI_TODO:
+TOR_TODO:
 
-最後にそれぞれを並べて見てみましょう。
+最後にそれぞれを並べてみましょう。
+Finally, let me display each.
 
 class_evalに渡す引数が違うだけで、定数の探索範囲はこのように違ってきます。
+The scope looking for constant are different in this way only by arguments to pass class_eval being different.
 
 <<click>>
 
 = Manage somehow
 
-KOUJI_TODO:
+TOR_TODO:
 
 このように複雑な定数探索の問題を修正するのは、簡単ではありませんでした。
+It was not easy to fix this error.
 
-2回のやり直しがあり、3回目でようやく満足な結果を得ることが出来ました。
+2回のやり直しがありました。そして、3回目でようやく修正できました。
+There were two times of fresh starts.
+And I was able to finally fix it with the third.
 
 <<click>>
 
 ソースコードの修正は3000行以上になりました。
+The corrections of the source code became more than 3,000 lines.
 
 この修正が完了したとき、MacRubyのメイン開発者であるLaurentは、チャット
 で私にこう書きました。
+When I fixed this error,
+Laurent which is a main developer of MacRuby,
+said to me that,
 
 <<click>>
 
@@ -1131,14 +1161,13 @@ Laurent S.
 it's official, kouji is the hero of the day/week/month/...? his patch seems to fix remaining lexical const lookup bugs :)
 
 私はとてもうれしかったです。
-
-このような複雑な問題を含め、いくつか修正しました。
+I had been very happy!!
 
 <<click>>
 
 = A very complex bug
 
-KOUJI_TODO:
+TOR_TODO:
 
 しかし、喜んでいたのもつかの間で、私は定数探索に関するとても難しいエラー
 を見つけました。
@@ -1180,36 +1209,53 @@ Then we're looking up constant B to output.
 
 <<click>>
 
-このとき、最初にこの枠の範囲から定数Bを探索します。そして、見つからない
-ため、Object、つまりトップレベルから定数Bを探索します。
+このとき、最初にこの枠の範囲から定数Bを探索します。
+Now, we are going to look for constant B within the green frame.
+
+そして、見つからないため、Object、つまりトップレベルから定数Bを探索します。
+And we fail.
+Then, we are going to look for constant B from Object.
+It also means we are going to look for constant B that is defined at top level.
 
 <<click>>
 
-ここで注意が必要です。class_evalのレシーバは、定数の探索範囲に含みませ
-ん。これはRubyの言語仕様です。
+ここで注意が必要です。
+Please be careful.
 
-そして、両方とも見つからないため、定数Bの探索に失敗すると思ったの
-ですが、
+class_evalのレシーバは、定数の探索範囲に含みません。これはRubyの言語仕様です。
+'class_eval' doesn't add receiver(A) to constant lookup scope.
+This is a Ruby's speficication.
+
+そして、両方とも見つからないため、定数Bの探索に失敗すると思ったのですが、
+So, I thought that we failed to look for constant B,
 
 <<click>>
 
 = A very complex bug (part 2)
 
-KOUJI_TODO:
+TOR_TODO:
 
-なんと、Ruby 1.9 ではAからも探索していまい、定数Bを見つけてしまったのです。
+なんと、cRuby 1.9 ではAからも探索してしまい、定数Bを見つけてしまったのです。
+Wow, cRuby 1.9 are looking for constant B from module A. Then it succeeded.
 
 <<click>>
 
-でも、Ruby 1.8.7 は私の想像通り、定数Bの探索に失敗します。当然、
-MacRuby もこのように動作します。
+でも、Ruby 1.8.7 は私の想像通り、定数Bの探索に失敗します。
+But, Ruby 1.8.7 failed.
+
+当然、MacRuby もこのように動作します。
+MacRuby is same.
 
 困った私は matz に相談しました。
+So, I asked matz advice for about this behavior.
 
 <<click>>
 
 その結果、これは Ruby 1.9 のバグだということになりました。
+He said this is a cRuby 1.9 bug.
+
 そして、あったいう間に 1.8.7 と同じ動作に修正されました。
+Then, cRuby 1.9 behavior fixed as Ruby 1.8.7 soon.
 
 <<click>>
 

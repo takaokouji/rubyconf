@@ -164,7 +164,6 @@ Next, the well-being of the Employee's Family
 And finally: The company itself
 
 <<click>>
-SLIDE_TODO: スライド２７と２８は同じです。
 
 = The NaCl Way (part 3)
 
@@ -209,33 +208,25 @@ and behaviorally with Ruby 1.9.
 
 <<click>>
 
-KOUJI_TODO: Presenter Noteは、ここまで記述した。
-
 = Ruby 1.9
 
 This is Ruby 1.9.
 
-これは Ruby 1.9 の場合のシステムブロック図です。
-上がユーザよりで、下がハードウェアよりを表しています。
 This system diagram shows the main building blocks of Ruby 1.9.
 The top side shows the blocks facing the user,
 and the bottom side shows the blocks facing the hardware.
 
 <<click>>
 
-上からユーザが作成したアプリケーション。
 At the top we have the applications made by the Ruby user.
 
 <<click>>
 
-その下が Ruby バージョン 1.9 です。
-ここでは Ruby の主要な部品を紹介します。
 Below that we have Ruby 1.9.
 These are Ruby's main building blocks.
 
 <<click>>
 
-以前は yarv と呼ばれていた Ruby VM 
 We have Ruby VM(ブィーエム), 
 Ruby's Virtual Machine, 
 which was previously called YARV(ヤーブィ).
@@ -246,86 +237,63 @@ We have the built-in garbage collection, which uses mark and sweep.
 
 <<click>>
 
-StringやArrayなどを含むBuilt-in Library
 Then we have the Built-in Libraries, 
 which includes the String class and the Array class and so on.
 
 <<click>>
 
-ReadlineやOpenSSLなどのStandard Library
 And then we have the Standard Library, 
 which includes Readline, OpenSSL and other useful libraries.
 
 <<click>>
 
-その下が Library です。
 Below Ruby, we have the system libraries.
 
 <<click>>
 
-そして、OS です。Ruby 1.9 はLinux、Windows、Mac OS Xなど、さまざまなプ
-ラットフォームで動作します。
 And below the libraries, we have the Operating System.
 Ruby 1.9 operates on a number of different platforms, 
 among others Linux, Windows, Mac OS X and so on.
 
 <<click>>
 
-Ruby 1.9 はこのような構成になっています。
 So, this is the structure of Ruby 1.9.
 
 <<click>>
 
 = MacRuby (part 3)
 
-次に MacRuby の場合のシステムブロック図を Ruby 1.9 と比較しながら上から
-順に見ていきましょう。
 So let's try to compare this with the system diagram as it looks for MacRuby.
 We'll look at each element in turn.
 
 <<click>>
 
-Application はそのままです。
 The application stays as it is.
 
 <<click>>
 
-当然、Ruby 1.9 は MacRuby に変わります。
 Naturally, Ruby 1.9 becomes MacRuby.
 
 <<click>>
 
-Ruby VMは、LLVM で置き換えています。
 Ruby VM(ヴィーエム) is replaced by LLVM(エルエルヴィーエム).
 
 <<click>>
 
-Built-in GCは、Mac OS Xが提供しているGCに置き換えられています。
-それはAutoZoneという名前です。
-AutoZoneは、Generational でかつ Threaded という特徴があります。
 The built-in Garbage Collection is replaced by a mechanism provided by Mac OS X.
 This Mac OS X feature is called AutoZone.
 AutoZone is a Generational and Threaded Garbage Collection mechanism.
 
 <<click>>
 
-Built-in Libraryの一部は、Mac OS Xが提供している Foundation と呼ばれる
-機能を使って置き換えられています。
-Object、Array、String、Hashなどが置き換えられています。
-その結果、それらのクラスに Ruby が提供する機能だけでなく、Foundation が
-提供する機能が追加されています。
-
-Part of the Built-in Library is replaced by a feature
-called Foundation which is provided by Mac OS X.
+Part of the Built-in Library is replaced by a feature called Foundation
+which is provided by Mac OS X.
 Object, Array, String, Hash and others are replaced this way.
-The result is that these classes get not only the functionality
-provided by Ruby,
+The result is that these classes get not only the functionality provided by Ruby,
 but also the functionality provided by Foundation.
 
 <<click>>
 
-例えば、Stringにはtransformというメソッドが追加されています。そのメソッ
-ドは、"kouji"に適用すると日本語のキャラクタに変換できます。
 For instance, 
 a Foundation method called "transform" is added to the Ruby String class.
 This method can convert the alphabet version of my name "kouji"
@@ -333,25 +301,21 @@ into the corresponding japanese hiragana characters.
 
 <<click>>
 
-Standard Libraryはほとんどそのままです。
 The Standard Libraries are more or less similar to Ruby 1.9.
 
 <<click>>
 
-その下のLibraryもそのままです。
 The system libraries are also unchanged.
 
 <<click>>
 
-そして、OSはMac OS Xです。実はMacRubyはMac OS Xでしか動かないのです :)
 And the OS is of course Mac OS X.
-Actually, MacRuby only runs on Mac OS X.
+Actually, MacRuby only runs on Mac OS X :P
 
 <<click>>
 
 = MacRuby (part 4)
 
-あらためて全体を見てみるとこんな感じです。
 So, if we look at the whole...
 well, then it looks like this.
 
@@ -359,24 +323,18 @@ well, then it looks like this.
 
 = Cocoa
 
-Mac OS X には、 Cocoa という Objective-C で書かれたライブラリがあります。
 On Mac OS X,
 we have some libraries called Cocoa which are written in Objective-C.
 
-Cocoa には、Mac OS X の機能のほぼ全て（例えば、GUI、画像・動画などのマ
-ルチメディア、テキストの読み上げなど）が含まれています。
 The Cocoa includes more or less all the features of Mac OS X,
 for instance a GUI toolkit, multimedia processing, text-to-speech and so on.
 
-Mac OS Xのアプリケーションの多くはCocoaを使って開発されています。
 The majority of Mac OS X applications are developed using Cocoa.
 
 <<click>>
 
 = MacRuby x Cocoa
 
-MacRuby は Cocoa を簡単に利用できます。
-実際、Cocoa を使うために MacRuby が存在しているといってもいいでしょう。
 It is easy to use Cocoa in MacRuby.
 Actually, we could say that MacRuby exists in order to allow us to use Cocoa.
 
@@ -384,76 +342,58 @@ Actually, we could say that MacRuby exists in order to allow us to use Cocoa.
 
 = MacRuby x Cocoa
 
-それでは、MacRubyからCocoaの使用例を見てみましょう。
 Well then, let's look at an example of how we can use Cocoa from MacRuby.
 
 <<click>>
 
-これは、サウンドを再生するサンプルプログラムです。
 This is a sample program that plays a sound.
 
 <<click>>
 
-MacRubyにはframeworkというメソッドが定義されています。
-MacRuby defines a method called "framework".
-このメソッドは、Cocoa などの system libraries をロードするためのメソッドです。
 The purpose of the "framework" method is to load system libraries such as Cocoa.
 
 <<click>>
 
-実際に Cocoa の機能を使っているのはこの部分です。
-ファイル名を指定して、サウンドファイルのインスタンスを生成します。
-そして、playメソッドを呼び出してサウンドを再生しています。
 This is the part where we are actually using Cocoa's functionality.
 We specify a filename and we generate an instance of a sound file.
 And then we call the "play" method to play back the sound.
 
 <<click>>
 
-以上が MacRuby の説明です。
 So, now I am done with my introductory explanation of MacRuby.
 
 <<click>>
 
 = MacRuby on Rails
 
-ここからが今日のメイントピックです。
 So, let's continue with the main topic, MacRuby *on Rails*.
 
-MacRuby on Rails
-
-これは、MacRuby で Ruby on Rails を動かすということです。
 So, I am going to talk about making Ruby on Rails works on MacRuby.
 
 <<click>>
 
 = Current Status
 
-現在では...
 Let's see what we can currently do with MacRuby on Rails
 
 <<click>>
 
-Railsプロジェクトの新規作成
 Creating a new Rails project.
 
 <<click>>
 
-scaffoldの実行
 Generating a scaffold.
 
 <<click>>
 
-serverの起動
 Starting up the server.
 
 <<click>>
 
-そして、Welcome Pageの表示
 And ... showing the welcome page.
 
-このように、なにも修正していないRailsをMacRubyで動作させることができます。
-So, it is currently possible to run a Rails application on MacRuby without modifying Rails.
+So, it is currently possible to run a Rails application on MacRuby
+without modifying Rails.
 
 However, it wasn't always like this.
 Let's travel back in time!
@@ -554,14 +494,12 @@ to do so for cRuby.
 
 = The Fixed Issues
 
-私がMacRubyを修正した箇所のうちのいくつかを紹介したいと思います。
 Now, I would like to discuss a couple the issues that I fixed in MacRuby.
 
 <<click>>
 
 = #860 catch/throw
 
-最初の修正です。
 Let's have a look at the first case, which is ...
 
 Trac Issue number 860(eight six zero),
@@ -581,76 +519,61 @@ Let me explain the reason.
 
 = Exception
 
-まず、MacRuby における例外処理の実現方法について説明します。
 First, I want to explain how exception handling is done on MacRuby.
-TODO:　これは修正前の話に限ってあれば、「is」を「was」にします。
 
 <<click>>
 
-このコードを見てください。
 Have a look at this code.
-
-このプログラムではraiseとrescueを2回行っています。
 In this program we raise and rescue twice.
 
-このプログラムをMacRubyで実行したときの様子を見てみましょう。
 Let's look at what happens when we run this program on MacRuby.
 
 <<click>>
 
-2行目で、最初の例外が発生します。
 On line two, we raise exception A.
 
 <<click>>
 
-このとき、MacRuby ではスタックに発生した例外を格納します。
 On MacRuby, raised exceptions are stored in a stack.
-
-このスタックを例外スタックと呼びます。
 We call this stack the Exception Stack.
 
 <<click>>
 
 <<click>>
 
-3行目で、その例外をrescueして、処理を続けています。
 On line 3, we rescuing exception A and continue the execution.
 
 <<click>>
 
-5行目で、次の例外が発生します。
 On line 5, inside the rescue block, we raise the exception B.
 
 <<click>>
 
-それを例外スタックに追加します。
 So, exception B is pushed onto the stack.
 
 <<click>>
 
-6行目で、その例外をrescueして、処理を続けています。
 On line 6, we rescue exception B and continue executing the code.
 
 <<click>>
 
-7行目で、rescue節を含むendに到達したので例外スタックから例外を1つ取り除きます。
-On line 7 we reach the end of the inner rescue block, so MacRuby pops one exception of the stack.
+On line 7, we reach the end of the inner rescue block,
+so MacRuby pops one exception of the stack.
 
 <<click>>
 
-8行目で、7行目と同じように例外スタックから例外を1つ取り除きます。
-And on line 8, we reach the end of the outer rescue block, and again we pop an exception off the Exception stack.
+And on line 8,
+we reach the end of the outer rescue block,
+and again we pop an exception off the Exception stack.
 
-これで全ての例外を処理できました。
 So, now we're done handling all the exceptions raised by this program.
-
-例外スタックは空の状態です。
 And the Exception stack is empty.
 
-このように、MacRuby では例外をスタックに格納して処理しています。
 This is the way that MacRuby stores and processes exceptions.
 
 <<click>>
+
+KOUJI_TODO: Presenter Noteは、ここまで記述した。
 
 = Exception and catch / throw
 

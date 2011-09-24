@@ -656,7 +656,6 @@ This is the way that MacRuby stores and processes exceptions.
 
 次に、例外処理と catch / throw を組み合わせたときの実現方法を説明します
 So let's look at how exeption handling is carried when we used in combination with catch and throw.
-SLIDE_TODO: タイトルで、「Excaption」を「Exception」に
 
 <<click>>
 
@@ -699,8 +698,6 @@ catchのブロックを抜け出すことが出来ます。
 
 <<click>>
 
-KOUJI_TODO: スライドの修正は、ここまで終わった。
-
 = throw
 
 念のため、throwの実装を見てみましょう。
@@ -719,11 +716,13 @@ pop_current_exception()関数は、例外スタックから例外を一つ取り
 
 <<click>>
 
+このように実装されています。
+
+<<click>>
+
 = #860 catch/throw
 
 それでは、もう一度、今回の問題の再現コードを見てみましょう。
-
-<<click>>
 
 先ほどと同様に、Exception Stackの内容に着目しながら、このプログラムを
 MacRubyで実行したときの様子を見てみましょう。
@@ -733,11 +732,16 @@ MacRubyで実行したときの様子を見てみましょう。
 2行目で、例外が発生します。
 それを例外スタックに追加します。
 
+<<click>>
+
 3行目で、その例外をrescueして、処理を続けています。
 
 <<click>>
 
 4行目で、catch と throw を実行します。
+
+<<click>>
+
 throw の実行時に、例外スタックから例外を1つ取り除きます。
 そして、例外スタックは空の状態になります。
 
@@ -812,6 +816,8 @@ So, this caused an error when running Rails on MacRuby.
 
 <<click>>
 
+<<click>>
+
 = #860 Fixed
 
 最後に、もう少し複雑なコードで修正後のMacRubyの動作を確認してみましょう。
@@ -820,11 +826,7 @@ So, this caused an error when running Rails on MacRuby.
 
 2行目で、例外が発生します。
 それを例外スタックに追加します。
-
 3行目で、その例外をrescueして、処理を続けています。
-
-<<click>>
-
 4行目で、catchを実行します。このとき、例外"A"を記録します。
 
 <<click>>
@@ -843,10 +845,10 @@ So, this caused an error when running Rails on MacRuby.
 
 それぞれが異なるため、例外"B"を例外スタックから取り除きます。
 
-<<click>>
-
 もう一度、catchで記録した例外"A"と例外スタックの一番上の例外"A"を比較します。
 それぞれが等しいため何もしません。
+
+<<click>>
 
 そして、catchのブロックを抜けます。
 
@@ -857,6 +859,8 @@ So, this caused an error when running Rails on MacRuby.
 私は、このようにして、この問題を修正しました。
 
 <<click>>
+
+KOUJI_TODO: スライドの修正は、ここまで終わった。
 
 = #1192 Constant lookup
 

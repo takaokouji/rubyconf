@@ -209,9 +209,9 @@ and behaviorally with Ruby 1.9.
 
 <<click>>
 
-= Ruby 1.9
+KOUJI_TODO: Presenter Noteは、ここまで記述した。
 
-KOUJI_TODO: いまここです。
+= Ruby 1.9
 
 This is Ruby 1.9.
 
@@ -221,39 +221,55 @@ This system diagram shows the main building blocks of Ruby 1.9.
 The top side shows the blocks facing the user,
 and the bottom side shows the blocks facing the hardware.
 
-上からユーザが作成したアプリケーション。例えば... Railsのようなミドルウェ
-アも含めます。
+<<click>>
+
+上からユーザが作成したアプリケーション。
 At the top we have the applications made by the Ruby user.
-For instance an application such as Rabbit or middleware such as Ruby on Rails.
+
+<<click>>
 
 その下が Ruby バージョン 1.9 です。
 ここでは Ruby の主要な部品を紹介します。
 Below that we have Ruby 1.9.
 These are Ruby's main building blocks.
 
+<<click>>
+
 以前は yarv と呼ばれていた Ruby VM 
 We have Ruby VM(ブィーエム), 
 Ruby's Virtual Machine, 
 which was previously called YARV(ヤーブィ).
 
+<<click>>
+
 We have the built-in garbage collection, which uses mark and sweep.
+
+<<click>>
 
 StringやArrayなどを含むBuilt-in Library
 Then we have the Built-in Libraries, 
 which includes the String class and the Array class and so on.
 
+<<click>>
+
 ReadlineやOpenSSLなどのStandard Library
 And then we have the Standard Library, 
 which includes Readline, OpenSSL and other useful libraries.
 
+<<click>>
+
 その下が Library です。
 Below Ruby, we have the system libraries.
+
+<<click>>
 
 そして、OS です。Ruby 1.9 はLinux、Windows、Mac OS Xなど、さまざまなプ
 ラットフォームで動作します。
 And below the libraries, we have the Operating System.
 Ruby 1.9 operates on a number of different platforms, 
 among others Linux, Windows, Mac OS X and so on.
+
+<<click>>
 
 Ruby 1.9 はこのような構成になっています。
 So, this is the structure of Ruby 1.9.
@@ -267,8 +283,12 @@ So, this is the structure of Ruby 1.9.
 So let's try to compare this with the system diagram as it looks for MacRuby.
 We'll look at each element in turn.
 
+<<click>>
+
 Application はそのままです。
 The application stays as it is.
+
+<<click>>
 
 当然、Ruby 1.9 は MacRuby に変わります。
 Naturally, Ruby 1.9 becomes MacRuby.
@@ -316,8 +336,12 @@ into the corresponding japanese hiragana characters.
 Standard Libraryはほとんどそのままです。
 The Standard Libraries are more or less similar to Ruby 1.9.
 
+<<click>>
+
 その下のLibraryもそのままです。
 The system libraries are also unchanged.
+
+<<click>>
 
 そして、OSはMac OS Xです。実はMacRubyはMac OS Xでしか動かないのです :)
 And the OS is of course Mac OS X.
@@ -328,7 +352,8 @@ Actually, MacRuby only runs on Mac OS X.
 = MacRuby (part 4)
 
 あらためて全体を見てみるとこんな感じです。
-So, if we look at the whole... well, then it looks like this.
+So, if we look at the whole...
+well, then it looks like this.
 
 <<click>>
 
@@ -382,90 +407,12 @@ The purpose of the "framework" method is to load system libraries such as Cocoa.
 This is the part where we are actually using Cocoa's functionality.
 We specify a filename and we generate an instance of a sound file.
 And then we call the "play" method to play back the sound.
-SLIDE_TODO: スライド４９と５０は同じ。PDFになったせいですかね。
 
 <<click>>
-
-= HelloMacRuby
-  
-次は、 GUI アプリケーションのサンプルプログラムです。
-Next, we have a sample program showing a GUI application.
-
-名前は HelloMacRuby とします。
-Let's call it HelloMacRuby.
-
-<<click>>
-
-「Push me!」ボタンをクリックします。
-So, we click the "Push me!" button.
-
-<<click>>
-
-すると、テキストフィールドに"Hello,MacRuby!"と表示します。
-And this displays "Hello, MacRuby" in the text field.
-
-このような簡単なプログラムです。
-So, this is just a simple example program.
-
-<<click>>
-
-= HelloMacRuby (part 2)
-
-HelloMacRuby は Xcode というツールを使って作成します。
-We create HelloMacRuby by using a tool called Xcode
-Xcode は Mac OS X のアプリケーションを開発するための IDE です。
-Xcode is an integrated development environment for developing Mac OX applications.
-残念ながら、最新の Xcode 4.1 は MacRuby に対応していません。
-Sadly, the latest version of Xcode, version 4.1, does not support MacRuby.
-次にリリースされる Xcode 4.2 は対応しています。
-But, MacRuby will supported in the next release of Xcode, version 4.2.
-Xcode 4.2 がリリースされるまで、もう少しお待ちください。
-So please wait a bit longer for the release of Xcode 4.2.
-TODO:この発言の役割はちょっとわかりません。高尾さんはXcodeを開発していますか？
-
-<<click>>
-
-それでは、このプログラムを見てください。
-Now let's look at the code for this program.
-
-これが HelloMacRuby のメインプログラムです。
-This is the main program of HelloMacRuby.
-
-Xcode に付属するテキストエディタでコーディングします。
-When making an application using Xcode you code the program in Xcode's associated text editor.
-TODO:これでいいですか？
-
-TODO:もし講演の時間が足りなかった場合は、HelloMacRubyの話を省略してもいいと思います。それとも、ソースコードを説明せずに進めても大丈夫な気がします。リスナーの集中力は切れてはメインの話に入るまで切れてしまうんじゃないかなと思います。--Tor
-
-2行目で、テキストフィールドとやりとりするためのアクセサを定義しています。
-On line 2, we define an accessor, which is used for interacting with the text field.
-
-
-4行目で、Push me!ボタンが押されたときのイベントハンドラを定義しています。
-On line 4, we define the event handler that is run when we click on the "Push me" button.
-
-5行目で、テキストフィールドに"Hello,MacRuby!"をセットしています。
-On line 5, we set the value of the text field to "Hello, MacRuby".
-
-<<click>>
-
-次は Xcode に付属する GUI エディタで View を作成します。
-Next, we generate the view in the text Xcode's　editor
-
-<<click>>
-
-最後は、アクセサとテキストフィールド、ボタンとイベントハンドラを関連づけます。
-Finally we attach the accessor to the text field and the button to the event handler.
-これも Xcode の GUI エディタで行います。
-This is also done in Xcode's editor, and is quite intuitive, since we simply use drag and drop operations.
-このとき、ドラッグアンドドロップを使って直感的な操作で関連づけることが出来ます。
-TODO:この文の内容は一個前の文に埋めました。
-
-これで HelloMacRuby は完成です。
-And so the HelloMacRuby application is complete.
 
 以上が MacRuby の説明です。
 So, now I am done with my introductory explanation of MacRuby.
+
 <<click>>
 
 = MacRuby on Rails
@@ -515,9 +462,11 @@ Let's travel back in time!
 
 = 7 months ago...
 
-7 months ago...
+7(seven) months ago...
 
-May 2011 in Japan.
+<<click>>
+
+March 2011(two thousand and eleven) in Japan.
 
 <<click>>
 
@@ -547,7 +496,13 @@ Not believing my own eyes, I tried to generate a scaffold...
 
 <<click>>
 
-Then it failed. After all Rails didn't work on MacRuby.
+Then it failed.
+
+<<click>>
+
+And, to start up the server too.
+
+After all Rails didn't work on MacRuby.
 
 <<click>>
 
@@ -556,17 +511,30 @@ Then it failed. After all Rails didn't work on MacRuby.
 So what did I do? My approach was to follow the five-step process
 shown here iteratively.
 
+<<click>>
+
 First, I run Rails.
+
+<<click>>
 
 As the next step I see where it fails.
 For instance, segmentation faults, abort
 programs and so on.
 
+<<click>>
+
 The third step is to research the cause of the failure.
+
+<<click>>
 
 The fourth step is to code a patch that fixes the problem.
 
+<<click>>
+
 And finally, I run RubySpec to verify my patch, 
+
+<<click>>
+
 and repeat from the top if necessary.
 
 <<click>>
@@ -584,10 +552,14 @@ to do so for cRuby.
 
 <<click>>
 
-= #860 catch/throw
+= The Fixed Issues
 
 私がMacRubyを修正した箇所のうちのいくつかを紹介したいと思います。
 Now, I would like to discuss a couple the issues that I fixed in MacRuby.
+
+<<click>>
+
+= #860 catch/throw
 
 最初の修正です。
 Let's have a look at the first case, which is ...
@@ -628,22 +600,33 @@ Let's look at what happens when we run this program on MacRuby.
 
 2行目で、最初の例外が発生します。
 On line two, we raise exception A.
+
+<<click>>
+
 このとき、MacRuby ではスタックに発生した例外を格納します。
 On MacRuby, raised exceptions are stored in a stack.
-TODO:この解釈でいいですか？--Tor
 
 このスタックを例外スタックと呼びます。
 We call this stack the Exception Stack.
 
 <<click>>
 
+<<click>>
+
 3行目で、その例外をrescueして、処理を続けています。
 On line 3, we rescuing exception A and continue the execution.
 
+<<click>>
+
 5行目で、次の例外が発生します。
 On line 5, inside the rescue block, we raise the exception B.
+
+<<click>>
+
 それを例外スタックに追加します。
 So, exception B is pushed onto the stack.
+
+<<click>>
 
 6行目で、その例外をrescueして、処理を続けています。
 On line 6, we rescue exception B and continue executing the code.
@@ -692,21 +675,31 @@ MacRubyで実行したときの様子を見てみましょう。
 catchに指定したブロックの中で:fooを指定してthrowを実行すると、
 catchのブロックを抜け出すことが出来ます。
 
+<<click>>
+
 3行目で、次の例外が発生します。それを例外スタックに追加します。
+
+<<click>>
 
 4行目で、その例外をrescueして、処理を続けています。
 
 <<click>>
 
 5行目で、:fooを指定してthrowを呼び出しています。
-その結果、catchのブロックを抜け出します。
-このとき、例外スタックから例外を1つ取り除きます。
 
 <<click>>
+
+その結果、catchのブロックを抜け出します。
+
+<<click>>
+
+このとき、例外スタックから例外を1つ取り除きます。
 
 このように、MacRubyでは、throwでも例外スタックから例外を取り除きます。
 
 <<click>>
+
+KOUJI_TODO: スライドの修正は、ここまで終わった。
 
 = throw
 
@@ -1315,6 +1308,8 @@ for patiently listening to this presentation,
 despite my clumsy English.
 
 <<click>>
+
+= Thank you
 
 ありがとうござました。
 Thank you very much.

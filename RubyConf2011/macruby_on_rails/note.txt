@@ -20,6 +20,8 @@ Thank you for your kind introduction.
 I would like welcome all of you.
 It is a great honor for me to be here.
 
+<<click>>
+
 = Kouji Takao
 
 Please let me introduce myself first. And let me introduce my company.
@@ -30,6 +32,8 @@ In my case, Kouji is my first name. And Takao is my last name.
 Please call me Kouji.
 
 <<click>>
+
+= Work
 
 I am a Research Engineer at Network Applied Communication Laboratory Ltd.
 In Japan, my company is famous in connection with the Ruby programming language.
@@ -42,6 +46,8 @@ And I work as the leader of small team.
 
 <<click>>
 
+= Spare Time
+
 I develop open source software during my spare time.
 
 I'm a MacRuby and cRuby committer.
@@ -50,13 +56,13 @@ In cRuby, I am in charge of the Readline module.
 
 <<click>>
 
+= Contact Information
+
 You can contact me on e-mail, twitter or facebook.
 
 <<click>>
 
 = My Company
-
-<<click>>
 
 As I said previously, my company's name is Network Applied Communication
 Laboratory Ltd. 
@@ -64,11 +70,16 @@ Laboratory Ltd.
 <<click>>
 
 My company is also known as NaCl.
+
+<<click>>
+
 As you probably know, NaCl means salt(ソォルト).
 Salt(ソォルト) is necessary for all creatures to live.
 This is why we named the company NaCl.
 
-<click>>
+<<click>>
+
+= My Company (part 2)
 
 You can check out NaCl's homepage at www.netlab.jp.
 
@@ -78,10 +89,13 @@ NaCl is located in Shimane Prefecture in Japan.
 
 <<click>>
 
-The company was founded in 2001.
-So, 2011 is the 10th anniversary.
-By the way, it's also my own 10th anniversary as an employee!
-Yeah!!
+The company was founded in 2001(two thousand and one).
+
+<<click>>
+
+So, 2011(two thousand and eleven) is the 10th(tenth) anniversary.
+By the way, it's also my own 10th(tenth) anniversary as an employee!
+I'm very happy!!
 
 <<click>>
 
@@ -89,8 +103,10 @@ Yeah!!
 
 Wow, that's a lot of Rubyists!?
 Just joking :)
-Actually, about half of my co-workers work using Ruby.
 
+<<click>>
+
+Actually, about half of my co-workers work using Ruby.
 However, 6 people are cRuby committers.
 
 <<click>>
@@ -145,7 +161,11 @@ And finally: The company itself
 
 <<click>>
 
+= The NaCl Way (part 3)
+
 This is why I love my company!!
+
+<<click>>
 
 = MacRuby on Rails
 
@@ -155,9 +175,15 @@ Now, Let's continue on to the main topic of today.
 
 MacRuby on Rails
 
-I will explain how I modified MacRuby to make it a suitable foundation
-for running Rails. I would also like to explain some of the technical
-intricacies that I discovered along the way.
+<<click>>
+
+= MacRuby on Rails(part 2)
+
+In my presentation,
+I will explain how I modified MacRuby to make it a suitable foundation for running Rails.
+I would also like to explain some of the technical intricacies that I discovered along the way.
+
+<<click>>
 
 <<click>>
 
@@ -179,6 +205,8 @@ and behaviorally with Ruby 1.9.
 <<click>>
 
 = Ruby 1.9
+
+KOUJI_TODO: いまここです。
 
 This is Ruby 1.9.
 

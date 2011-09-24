@@ -5,11 +5,10 @@ date: "2011/09/28"
 = はじめに
 Introduction
 
-これはRubyConf2011で私が発表する「MacRuby on Rails」の原稿です。
 This is the manuscript for my presentation "MacRuby on Rails" for RubyConf2011.
 
-当日は基本的にこの資料に書いたとおりのことを話します。
-On the day of the presentation I will generally speak as is written in this manuscript.
+On the day of the presentation
+I will generally speak as is written in this manuscript.
 
 = MacRuby on Rails
 
@@ -573,9 +572,9 @@ This is the way that MacRuby stores and processes exceptions.
 
 <<click>>
 
-KOUJI_TODO: Presenter Noteは、ここまで記述した。
-
 = Exception and catch / throw
+
+KOUJI_TODO:
 
 次に、例外処理と catch / throw を組み合わせたときの実現方法を説明します
 So let's look at how exeption handling is carried when we used in combination with catch and throw.
@@ -623,6 +622,8 @@ catchのブロックを抜け出すことが出来ます。
 
 = throw
 
+KOUJI_TODO:
+
 念のため、throwの実装を見てみましょう。
 TOR_TODO: The MacRuby implementation at that time was like this.
 
@@ -644,6 +645,8 @@ pop_current_exception()関数は、例外スタックから例外を一つ取り
 <<click>>
 
 = #860 catch/throw
+
+KOUJI_TODO:
 
 それでは、もう一度、今回の問題の再現コードを見てみましょう。
 
@@ -701,6 +704,8 @@ So, this caused an error when running Rails on MacRuby.
 
 = How to fix
 
+KOUJI_TODO:
+
 この問題の修正内容を、修正後のコードの動作にそって説明します。
 
 <<click>>
@@ -727,6 +732,8 @@ So, this caused an error when running Rails on MacRuby.
 
 = How to fix (part 2)
 
+KOUJI_TODO:
+
 これをthrowに実装したのがこのコードです。
 
 <<click>>
@@ -742,6 +749,8 @@ So, this caused an error when running Rails on MacRuby.
 <<click>>
 
 = #860 Fixed
+
+KOUJI_TODO:
 
 最後に、もう少し複雑なコードで修正後のMacRubyの動作を確認してみましょう。
 
@@ -785,14 +794,10 @@ So, this caused an error when running Rails on MacRuby.
 
 = #1192 Constant lookup
 
-それでは次の修正を説明します。
-Next, let's look at another example of how I fixed MacRuby, the 
-
-Trac Issue number 1192 (one one nine two),
+Next, let's look at another example of how I fixed MacRuby,
+the Trac Issue number 1192 (one one nine two),
 which is related to Constant Lookup in MacRuby.
 
-これはmodule_evalやclass_evalをつかったような、いくつかのケースで定数の探索に
-失敗してしまうという問題です。
 The issue was that MacRuby failed 
 to correctly look up constants in a number of situations
 when you used module_eval and class_eval.
@@ -807,11 +812,7 @@ If you run this code, then the following error will occur.
 
 <<click>>
 
-Object.class_eval { B } の行を見てください。
-Please look at the line with Object dot class_eval.
-
-定数Bを探すときcRubyでは、最初にこの枠の範囲を対象にします。
-そして、定数Bを見つけます。
+Please look at the line with Object .(dot) class_eval.
 
 In cRuby, when we look for the constant B, 
 we start looking within the green box.
@@ -819,8 +820,6 @@ So, we are able to find constant B.
 
 <<click>>
 
-しかし、MacRubyではclass_evalのレシーバであるObjectからしか探索しませんでした。
-当然、Objectには定数Bは定義されていません。その結果、定数Bの探索に失敗します。
 However, in the MacRuby, at that time,
 we only looked within class_eval's receiver object.
 And since constant B isn't defined there,
@@ -830,69 +829,54 @@ the constant lookup would fail in MacRuby.
 
 = Constant Lookup
 
-この問題を理解するには、Rubyにおける定数の探索のやり方を詳しく知る必要があります。そしてまた、それはRubyの言語仕様の中でもとても難しい問題の一つです。
 To really understand this issue,
 you must have a detailed understanding of how constant lookup works in Ruby.
 And this is one of the parts of Ruby's language specification that quite hard to understand.
 
-なお、定数探索の詳細を知っておかなくても多くの場合に困りません。
 And in most cases,
 you can get along quite fine without knowing the details of constant lookups in Ruby.
 
 <<click>>
 
-まずはこのコードを見てください。
 Let's have a look at this code.
-
-上から順番に説明します。
 We'll look at it from the top and down.
 
 <<click>>
 
-1行目で、module Aを定義します。
-In line 1, we begin the definition of module A.
+On line 1, we begin the definition of module A.
 
 <<click>>
 
-2行目で、module Bを定義します。
-And in line 2, we begin the definition of module B.
+And on line 2, we begin the definition of module B.
 
 <<click>>
 
-3行目で、module Bに定数CONSTを定義します。
-In line 3, we define a constant called CONST in module B.
+On line 3, we define a constant called CONST in module B.
 
 <<click>>
 
-4行目で、トップレベルのmodule A、つまり1行目で定義したmodule Aを再定義します。
-In line 4,
+On line 4,
 we re-open the top-level module A,
 in other words,
 the module A that we defined in line 1.
 
 <<click>>
 
-5行目で、定数CONSTを標準出力に出力します。
 And finally,
-in line 5,
+on line 5,
 we print the contents of the constant CONST to the standard output.
 
 <<click>>
 
-このとき、cRubyではこの枠の範囲から定数CONSTを探索します。
 In this example,
 cRuby would look for the constant CONST within the green frame.
 
-この枠の範囲を Lexical Scope といいます。
 We call the scope represented by the green frame for "Lexical Scope"
 
-そして、module Bに定義された定数CONSTを見つけます。
 And, cRuby would find the constant CONST that is defined in module B.
 
 <<click>>
 
-また、本プレゼンテーションでは Lexical Scope から定数を探索することを
-Lexical Constant Lookupと呼びます。
 And here, for the sake of this presentation,
 I am going to refer to the lookup of constants within Lexical Scope as "Lexical Constant Lookup".
 
@@ -900,116 +884,90 @@ I am going to refer to the lookup of constants within Lexical Scope as "Lexical 
 
 = But...
 
-当時のMacRubyには、Lexical Constant Lookup が実装されていませんでした。
 At the time, MacRuby had not implemented Lexical Constant Lookup.
 
 <<click>>
 
-このコードの場合だと、5行目では、module Aからしか定数CONSTを探索しませ
-んでした。
 In this code on line 5,
 MacRuby only looks for the constant CONST within module A.
 
 <<click>>
 
-その結果、定数CONSTを見つけることができませんでした。
 Therefore, CONST cannot be found.
 
 <<click>>
 
 = Constant Lookup is complex
 
-次はclass_evalを使った例です。
 Next,
 we have an example with class_eval.
 
-class_evalを使うと、定数探索はもっと複雑になります。
 Constant lookup becomes even more complex when we use class_eval.
 
 <<click>>
 
-class_evalに文字列を渡すか、それともブロックを渡すかで結果が異なります。
 The behavior changes
 whether we pass a block or a string as the argument to class_eval.
 
-左がブロックを渡しています。
 In the code example on the left hand we pass a block.
 
-右が文字列を渡しています。
 And in the right hand example we pass a string.
 
-それ以外の違いはありません。
 Except for the different arguments, the two examples are identical.
 
 <<click>>
 
 = class_eval(&Block)
 
-Blockを渡す場合について、上から順に説明します。
+KOUJI_TODO:
+
 First, I'll explain about calling class_eval with a Block.
 Let me explain this code sequentially from the top.
 
 <<click>>
 
-1行目で、module Aを定義します。
 On line 1, we define module A.
 
 <<click>>
 
-2行目で、定数CONSTを定義します。
 On line 2, we define the constant CONST
 
 <<click>>
 
-3行目で、メソッドfを定義します。
 On line 3, we define method f.
 
 <<click>>
 
-4行目で、class_evalをブロックを渡して呼び出します。
 On line 4, we pass the block to class_eval.
 
 <<click>>
 
-5行目で、定数CONSTを標準出力に出力します。
 On line 5, we print the content of the constant CONST to the standard output.
 
 <<click>>
 
-6行目で、class_evalに渡すブロックの終端を指定します。
 On line 6, we close the class_eval block.
 
-実際には、4〜6行目はメソッドfを呼び出したときに実行されます。
 So, when we call method f, then line four to six gets executed.
 
-TOR_TODO: このような徹底的な動作の列強を毎回する必要はない気がします。要点だけに絞ったほうがいいかもしれないです。--Tor
--> 了解しました。どのようにするのがいいか、相談させてください。　-Kouji
-
 <<click>>
 
-少し飛ばします。
 Let's jump a bit forward to line 10.
 
-10行目で、class Kを定義します。
-In line 10, we define class K.
+On line 10, we define class K.
 
 <<click>>
 
-11行目で、class Kに定数CONSTを定義します。
-In line 11, we define another constant called CONST,
+On line 11, we define another constant called CONST,
 but this time inside class K.
 
 <<click>>
 
-12行目で、extend Aを実行します。
 As you can see on line 12, we extend class K with module A.
 
 <<click>>
 
-13行目で、module Aのメソッドfを呼び出します。
 On line 13, we call module A's f method.
-
-その結果、4〜6行目が実行されます。
 As a result, the code in line 4 to 6 is called.
 
 このときの定数CONSTを最初に探索する範囲がわかりますか？
@@ -1027,6 +985,8 @@ Therefore, 'p method' outputs the string "A's CONST".
 <<click>>
 
 = class_eval(String)
+
+KOUJI_TODO:
 
 次に、文字列を渡す場合についてです。
 Next, about performing class_eval with String.
@@ -1060,6 +1020,8 @@ Therefore, 'p method' outputs the string "K's CONST".
 
 = Constant Lookup is complex (part 2)
 
+KOUJI_TODO:
+
 最後にそれぞれを並べて見てみましょう。
 
 class_evalに渡す引数が違うだけで、定数の探索範囲はこのように違ってきます。
@@ -1067,6 +1029,8 @@ class_evalに渡す引数が違うだけで、定数の探索範囲はこのよ�
 <<click>>
 
 = Manage somehow
+
+KOUJI_TODO:
 
 このように複雑な定数探索の問題を修正するのは、簡単ではありませんでした。
 
@@ -1093,10 +1057,11 @@ it's official, kouji is the hero of the day/week/month/...? his patch seems to f
 
 = A very complex bug
 
+KOUJI_TODO:
+
 しかし、喜んでいたのもつかの間で、私は定数探索に関するとても難しいエラー
 を見つけました。
-
-I found a behavior that is complex to implement.
+However, I found a behavior that is complex to implement.
 
 <<click>>
 
@@ -1106,38 +1071,31 @@ Let me explain this code sequentially from the top.
 
 <<click>>
 
-1行目で、module Aを定義します。
-In line number one, we define module A.
+On line one, we define module A.
 
 <<click>>
 
-2行目で、module Aに定数Bを定義します。
-In line number two, we define constant B under module A.
+On line two, we define constant B under module A.
 
 <<click>>
 
-5行目で、Aをレシーバに指定してclass_evalを実行します。
-In line number five, we specify module A as receiver, and perform
+On line five, we specify module A as receiver, and perform
 class_eval with block.
 
 <<click>>
 
-6行目で、class_evalのブロックの中であるためレシーバはクラスAです。
-そのため、クラスメソッドfを定義します。
-In line number six, we are inside
+On line six, we are inside
 class_eval block, so current receiver is module A.
 Therefore, we define class method f of module A. 
 
 <<click>>
 
-7行目で、定数Bを標準出力に出力します。
-In line number seven, we output Constant B to standard output.
+On line seven, we output Constant B to standard output.
 
 <<click>>
 
-11行目で、Aのfを呼び出します。そして、定数Bを出力するために探索します。
-In line number eleven, we perform method f of module A. Then we're
-looking up constant B to output.
+On line eleven, we perform method f of module A.
+Then we're looking up constant B to output.
 
 <<click>>
 
@@ -1155,6 +1113,8 @@ looking up constant B to output.
 <<click>>
 
 = A very complex bug (part 2)
+
+KOUJI_TODO:
 
 なんと、Ruby 1.9 ではAからも探索していまい、定数Bを見つけてしまったのです。
 
@@ -1174,13 +1134,15 @@ MacRuby もこのように動作します。
 
 = Demo
 
+KOUJI_TODO:
+
 さぁ、それではみなさんに実際の成果をお見せするときがきました。
 
 MacRuby で Rails を動作させます。
-Rails works on MacRuby.
+Making Rails works on MacRuby.
 
 ここでは、Rails のバージョンは少し古いのですが 3.0.7 です。
-At this time, I use Rails version 3.0.7 that is bit old.
+At this time, we use Rails version 3.0.7 that is bit old.
 
 (デモを開始)
 
@@ -1188,21 +1150,18 @@ At this time, I use Rails version 3.0.7 that is bit old.
 
 = #1390 rb_vm_prepare_block
 
-実は、Welcome Pageにある"About your application’s environment"リンクをクリックするとabortします。
+Actually,
+MacRuby aborts
+if you click "About your application’s environment" link in Welcome page.
 
-Actually, MacRuby aborts if you click "About your application’s environment" link in Welcome page.
-
-Rails を動かすのは定数探索よりも難しい問題ですね。
-Hmm, working Rails on MacRuby is more difficult than to implement lexical constant lookup, isn't it?
+Hmm, working Rails on MacRuby is more difficult
+than to implement lexical constant lookup, isn't it?
 
 <<click>>
 
 = The MacRuby train trip continues ...
 
-MacRuby による電車の旅はまだまだ続きます。
 The MacRuby train trip continues ...
-
-ぜひ、みなさんも一緒に旅をしましょう。
 Everyone, please get on board.
 
 <<click>>
@@ -1225,7 +1184,10 @@ This is the MacRuby Mailing List's address.
 
 = Conclusion
 
+KOUJI_TODO:
+
 私のプレゼンテーションのまとめです。
+Let me explain this presentation conclusion.
 
 <<click>>
 
@@ -1242,21 +1204,18 @@ But there is still a lot to do.
 
 = Q & A
 
-それでは、何か質問はありますか？
 And now, I would like to answer any questions you have.
 
-質問される方は、できれば、ゆっくりとシンプルなものをお願いします。
 If you have a question, please ask me, but if possible please speak slowly.
 
 <<click>>
 
 = Acknowledgement
 
-最後に、
+KOUJI_TODO:
+
 Last of all,
 
-このプレゼンテーションの機会を与えてくださった RubyConf の運営者の方に
-感謝いたします。
 I would like to express my gratitude toward the RubyConf hosts and organizers
 for giving me the opportunity to give this presentation.
 
@@ -1268,8 +1227,6 @@ TODO:
 
 <<click>>
 
-そして、私のつたない英語でのプレゼンテーションにつきあってくださった会
-場のみなさまに感謝いたします。
 And finally,
 I would like to thank my everyone here,
 for patiently listening to this presentation,
@@ -1279,10 +1236,7 @@ despite my clumsy English.
 
 = Thank you
 
-ありがとうござました。
 Thank you very much.
-
-<<click>>
 
 ################################################################################
 Local Variables:

@@ -3,9 +3,13 @@ author: "高尾宏治"
 date: "2011/09/28"
 
 = はじめに
+Introduction
 
 これはRubyConf2011で私が発表する「MacRuby on Rails」の原稿です。
+This is the manuscript for my presentation "MacRuby on Rails" for RubyConf2011.
+
 当日は基本的にこの資料に書いたとおりのことを話します。
+On the day of the presentation I will generally speak as is written in this manuscript.
 
 = MacRuby on Rails
 
@@ -93,9 +97,9 @@ The company was founded in 2001(two thousand and one).
 
 <<click>>
 
-So, 2011(two thousand and eleven) is the 10th(tenth) anniversary.
-By the way, it's also my own 10th(tenth) anniversary as an employee!
-I'm very happy!!
+So, 2011(two thousand and eleven) is the 10th(tenth) anniversary of the company.
+As a matter of fact, it's also my own 10th(tenth) anniversary as an employee!
+I'm very happy about that!!
 
 <<click>>
 
@@ -160,6 +164,7 @@ Next, the well-being of the Employee's Family
 And finally: The company itself
 
 <<click>>
+SLIDE_TODO: スライド２７と２８は同じです。
 
 = The NaCl Way (part 3)
 
@@ -169,7 +174,7 @@ This is why I love my company!!
 
 = MacRuby on Rails
 
-Now, Let's continue on to the main topic of today.
+Now, let's continue on to the main topic of today.
 
 <<click>>
 
@@ -189,7 +194,7 @@ I would also like to explain some of the technical intricacies that I discovered
 
 = MacRuby
 
-First, I would like to first briefly explain about MacRuby.
+First, I would like to briefly explain about MacRuby.
 
 <<click>>
 
@@ -239,7 +244,7 @@ which includes the String class and the Array class and so on.
 
 ReadlineやOpenSSLなどのStandard Library
 And then we have the Standard Library, 
-which includes Readline, OpenSSL and so on.
+which includes Readline, OpenSSL and other useful libraries.
 
 その下が Library です。
 Below Ruby, we have the system libraries.
@@ -278,8 +283,7 @@ Ruby VM(ヴィーエム) is replaced by LLVM(エルエルヴィーエム).
 Built-in GCは、Mac OS Xが提供しているGCに置き換えられています。
 それはAutoZoneという名前です。
 AutoZoneは、Generational でかつ Threaded という特徴があります。
-
-The built-in Garbage Collection is replaced by the mechanism provided by Mac OS X.
+The built-in Garbage Collection is replaced by a mechanism provided by Mac OS X.
 This Mac OS X feature is called AutoZone.
 AutoZone is a Generational and Threaded Garbage Collection mechanism.
 
@@ -378,6 +382,7 @@ The purpose of the "framework" method is to load system libraries such as Cocoa.
 This is the part where we are actually using Cocoa's functionality.
 We specify a filename and we generate an instance of a sound file.
 And then we call the "play" method to play back the sound.
+SLIDE_TODO: スライド４９と５０は同じ。PDFになったせいですかね。
 
 <<click>>
 
@@ -407,48 +412,71 @@ So, this is just a simple example program.
 = HelloMacRuby (part 2)
 
 HelloMacRuby は Xcode というツールを使って作成します。
+We create HelloMacRuby by using a tool called Xcode
 Xcode は Mac OS X のアプリケーションを開発するための IDE です。
+Xcode is an integrated development environment for developing Mac OX applications.
 残念ながら、最新の Xcode 4.1 は MacRuby に対応していません。
+Sadly, the latest version of Xcode, version 4.1, does not support MacRuby.
 次にリリースされる Xcode 4.2 は対応しています。
+But, MacRuby will supported in the next release of Xcode, version 4.2.
 Xcode 4.2 がリリースされるまで、もう少しお待ちください。
+So please wait a bit longer for the release of Xcode 4.2.
+TODO:この発言の役割はちょっとわかりません。高尾さんはXcodeを開発していますか？
 
 <<click>>
 
 それでは、このプログラムを見てください。
+Now let's look at the code for this program.
 
 これが HelloMacRuby のメインプログラムです。
+This is the main program of HelloMacRuby.
+
 Xcode に付属するテキストエディタでコーディングします。
+When making an application using Xcode you code the program in Xcode's associated text editor.
+TODO:これでいいですか？
+
+TODO:もし講演の時間が足りなかった場合は、HelloMacRubyの話を省略してもいいと思います。それとも、ソースコードを説明せずに進めても大丈夫な気がします。リスナーの集中力は切れてはメインの話に入るまで切れてしまうんじゃないかなと思います。--Tor
 
 2行目で、テキストフィールドとやりとりするためのアクセサを定義しています。
+On line 2, we define an accessor, which is used for interacting with the text field.
+
 
 4行目で、Push me!ボタンが押されたときのイベントハンドラを定義しています。
+On line 4, we define the event handler that is run when we click on the "Push me" button.
 
 5行目で、テキストフィールドに"Hello,MacRuby!"をセットしています。
+On line 5, we set the value of the text field to "Hello, MacRuby".
 
 <<click>>
 
 次は Xcode に付属する GUI エディタで View を作成します。
+Next, we generate the view in the text Xcode's　editor
 
 <<click>>
 
 最後は、アクセサとテキストフィールド、ボタンとイベントハンドラを関連づけます。
+Finally we attach the accessor to the text field and the button to the event handler.
 これも Xcode の GUI エディタで行います。
+This is also done in Xcode's editor, and is quite intuitive, since we simply use drag and drop operations.
 このとき、ドラッグアンドドロップを使って直感的な操作で関連づけることが出来ます。
+TODO:この文の内容は一個前の文に埋めました。
 
 これで HelloMacRuby は完成です。
+And so the HelloMacRuby application is complete.
 
 以上が MacRuby の説明です。
-
+So, now I am done with my introductory explanation of MacRuby.
 <<click>>
 
 = MacRuby on Rails
 
 ここからが今日のメイントピックです。
+So, let's continue with the main topic, MacRuby *on Rails*.
 
 MacRuby on Rails
 
 これは、MacRuby で Ruby on Rails を動かすということです。
-that means Ruby on Rails works on MacRuby.
+So, I am going to talk about making Ruby on Rails works on MacRuby.
 
 <<click>>
 
@@ -528,13 +556,13 @@ Then it failed. After all Rails didn't work on MacRuby.
 So what did I do? My approach was to follow the five-step process
 shown here iteratively.
 
-First, run Rails.
+First, I run Rails.
 
-The next step is to see where it fails.
+As the next step I see where it fails.
 For instance, segmentation faults, abort
 programs and so on.
 
-The third step is when I research the cause of the failure.
+The third step is to research the cause of the failure.
 
 The fourth step is to code a patch that fixes the problem.
 
@@ -582,53 +610,78 @@ Let me explain the reason.
 = Exception
 
 まず、MacRuby における例外処理の実現方法について説明します。
+First, I want to explain how exception handling is done on MacRuby.
+TODO:　これは修正前の話に限ってあれば、「is」を「was」にします。
 
 <<click>>
 
 このコードを見てください。
+Have a look at this code.
+
 このプログラムではraiseとrescueを2回行っています。
+In this program we raise and rescue twice.
 
 このプログラムをMacRubyで実行したときの様子を見てみましょう。
+Let's look at what happens when we run this program on MacRuby.
 
 <<click>>
 
 2行目で、最初の例外が発生します。
+On line two, we raise exception A.
 このとき、MacRuby ではスタックに発生した例外を格納します。
+On MacRuby, raised exceptions are stored in a stack.
+TODO:この解釈でいいですか？--Tor
+
 このスタックを例外スタックと呼びます。
+We call this stack the Exception Stack.
 
 <<click>>
 
 3行目で、その例外をrescueして、処理を続けています。
+On line 3, we rescuing exception A and continue the execution.
 
 5行目で、次の例外が発生します。
+On line 5, inside the rescue block, we raise the exception B.
 それを例外スタックに追加します。
+So, exception B is pushed onto the stack.
 
 6行目で、その例外をrescueして、処理を続けています。
+On line 6, we rescue exception B and continue executing the code.
 
 <<click>>
 
 7行目で、rescue節を含むendに到達したので例外スタックから例外を1つ取り除きます。
+On line 7 we reach the end of the inner rescue block, so MacRuby pops one exception of the stack.
 
 <<click>>
 
 8行目で、7行目と同じように例外スタックから例外を1つ取り除きます。
+And on line 8, we reach the end of the outer rescue block, and again we pop an exception off the Exception stack.
 
 これで全ての例外を処理できました。
+So, now we're done handling all the exceptions raised by this program.
+
 例外スタックは空の状態です。
+And the Exception stack is empty.
 
 このように、MacRuby では例外をスタックに格納して処理しています。
+This is the way that MacRuby stores and processes exceptions.
 
 <<click>>
 
 = Exception and catch / throw
 
-次に、例外処理と catch / throw を組み合わせたときの実現方法を説明します。
+次に、例外処理と catch / throw を組み合わせたときの実現方法を説明します
+So let's look at how exeption handling is carried when we used in combination with catch and throw.
+SLIDE_TODO: タイトルで、「Excaption」を「Exception」に
 
 <<click>>
 
 このコードを見てください。
+
 このプログラムでは例外が発生したあとで、throwによってcatchまでジャンプ
 しています。
+TOR_TODO:bookmark
 
 先ほどと同様に、Exception Stackの内容に着目しながら、このプログラムを
 MacRubyで実行したときの様子を見てみましょう。

@@ -860,8 +860,6 @@ So, this caused an error when running Rails on MacRuby.
 
 <<click>>
 
-KOUJI_TODO: スライドの修正は、ここまで終わった。
-
 = #1192 Constant lookup
 
 それでは次の修正を説明します。
@@ -872,7 +870,7 @@ which is related to Constant Lookup in MacRuby.
 
 これはmodule_evalやclass_evalをつかったような、いくつかのケースで定数の探索に
 失敗してしまうという問題です。
-The issue was that MacRuby failed
+The issue was that MacRuby failed 
 to correctly look up constants in a number of situations
 when you used module_eval and class_eval.
 
@@ -907,7 +905,7 @@ the constant lookup would fail in MacRuby.
 
 <<click>>
 
-= Lexical Constant Lookup
+= Constant Lookup
 
 この問題を理解するには、Rubyにおける定数の探索のやり方を詳しく知る必要があります。そしてまた、それはRubyの言語仕様の中でもとても難しい問題の一つです。
 To really understand this issue,
@@ -926,20 +924,30 @@ Let's have a look at this code.
 上から順番に説明します。
 We'll look at it from the top and down.
 
+<<click>>
+
 1行目で、module Aを定義します。
 In line 1, we begin the definition of module A.
+
+<<click>>
 
 2行目で、module Bを定義します。
 And in line 2, we begin the definition of module B.
 
+<<click>>
+
 3行目で、module Bに定数CONSTを定義します。
 In line 3, we define a constant called CONST in module B.
+
+<<click>>
 
 4行目で、トップレベルのmodule A、つまり1行目で定義したmodule Aを再定義します。
 In line 4,
 we re-open the top-level module A,
 in other words,
 the module A that we defined in line 1.
+
+<<click>>
 
 5行目で、定数CONSTを標準出力に出力します。
 And finally,
@@ -952,13 +960,13 @@ we print the contents of the constant CONST to the standard output.
 In this example,
 cRuby would look for the constant CONST within the green frame.
 
+この枠の範囲を Lexical Scope といいます。
+We call the scope represented by the green frame for "Lexical Scope"
+
 そして、module Bに定義された定数CONSTを見つけます。
 And, cRuby would find the constant CONST that is defined in module B.
 
 <<click>>
-
-この枠の範囲を Lexical Scope といいます。
-We call the scope represented by the green frame for "Lexical Scope"
 
 また、本プレゼンテーションでは Lexical Scope から定数を探索することを
 Lexical Constant Lookupと呼びます。
@@ -995,6 +1003,8 @@ we have an example with class_eval.
 class_evalを使うと、定数探索はもっと複雑になります。
 Constant lookup becomes even more complex when we use class_eval.
 
+<<click>>
+
 class_evalに文字列を渡すか、それともブロックを渡すかで結果が異なります。
 The behavior changes
 whether we pass a block or a string as the argument to class_eval.
@@ -1016,20 +1026,32 @@ Blockを渡す場合について、上から順に説明します。
 First, I'll explain about calling class_eval with a Block.
 Let me explain this code sequentially from the top.
 
+<<click>>
+
 1行目で、module Aを定義します。
 On line 1, we define module A.
+
+<<click>>
 
 2行目で、定数CONSTを定義します。
 On line 2, we define the constant CONST
 
+<<click>>
+
 3行目で、メソッドfを定義します。
 On line 3, we define method f.
+
+<<click>>
 
 4行目で、class_evalをブロックを渡して呼び出します。
 On line 4, we pass the block to class_eval.
 
+<<click>>
+
 5行目で、定数CONSTを標準出力に出力します。
 On line 5, we print the content of the constant CONST to the standard output.
+
+<<click>>
 
 6行目で、class_evalに渡すブロックの終端を指定します。
 On line 6, we close the class_eval block.
@@ -1040,18 +1062,26 @@ So, when we call method f, then line four to six gets executed.
 TOR_TODO: このような徹底的な動作の列強を毎回する必要はない気がします。要点だけに絞ったほうがいいかもしれないです。--Tor
 -> 了解しました。どのようにするのがいいか、相談させてください。　-Kouji
 
+<<click>>
+
 少し飛ばします。
 Let's jump a bit forward to line 10.
 
 10行目で、class Kを定義します。
 In line 10, we define class K.
 
+<<click>>
+
 11行目で、class Kに定数CONSTを定義します。
 In line 11, we define another constant called CONST,
 but this time inside class K.
 
+<<click>>
+
 12行目で、extend Aを実行します。
 As you can see on line 12, we extend class K with module A.
+
+<<click>>
 
 13行目で、module Aのメソッドfを呼び出します。
 On line 13, we call module A's f method.
@@ -1097,13 +1127,11 @@ Next, about performing class_eval with String.
 のときに定数の探索範囲を決定するからです。その結果、13行目の周辺が、定
 数の探索範囲となります。
 
+このような実行時にかわる範囲のことをdynamic scopeといいます。
+
 <<click>>
 
 Therefore, 'p method' outputs the string "K's CONST".
-
-<<click>>
-
-このような実行時にかわる範囲のことをdynamic scopeといいます。
 
 <<click>>
 
@@ -1120,9 +1148,10 @@ class_evalに渡す引数が違うだけで、定数の探索範囲はこのよ�
 このように複雑な定数探索の問題を修正するのは、簡単ではありませんでした。
 
 2回のやり直しがあり、3回目でようやく満足な結果を得ることが出来ました。
-ソースコードの修正は3000行以上になりました。
 
 <<click>>
+
+ソースコードの修正は3000行以上になりました。
 
 この修正が完了したとき、MacRubyのメイン開発者であるLaurentは、チャット
 で私にこう書きました。
@@ -1152,15 +1181,23 @@ This error can be reproduced by this code.
 
 Let me explain this code sequentially from the top.
 
+<<click>>
+
 1行目で、module Aを定義します。
 In line number one, we define module A.
+
+<<click>>
 
 2行目で、module Aに定数Bを定義します。
 In line number two, we define constant B under module A.
 
+<<click>>
+
 5行目で、Aをレシーバに指定してclass_evalを実行します。
 In line number five, we specify module A as receiver, and perform
 class_eval with block.
+
+<<click>>
 
 6行目で、class_evalのブロックの中であるためレシーバはクラスAです。
 そのため、クラスメソッドfを定義します。
@@ -1168,8 +1205,12 @@ In line number six, we are inside
 class_eval block, so current receiver is module A.
 Therefore, we define class method f of module A. 
 
+<<click>>
+
 7行目で、定数Bを標準出力に出力します。
 In line number seven, we output Constant B to standard output.
+
+<<click>>
 
 11行目で、Aのfを呼び出します。そして、定数Bを出力するために探索します。
 In line number eleven, we perform method f of module A. Then we're
@@ -1185,9 +1226,7 @@ looking up constant B to output.
 ここで注意が必要です。class_evalのレシーバは、定数の探索範囲に含みませ
 ん。これはRubyの言語仕様です。
 
-<<click>>
-
-両方とも見つからないため、定数Bの探索に失敗すると思ったの
+そして、両方とも見つからないため、定数Bの探索に失敗すると思ったの
 ですが、
 
 <<click>>
@@ -1206,7 +1245,7 @@ MacRuby もこのように動作します。
 <<click>>
 
 その結果、これは Ruby 1.9 のバグだということになりました。
-そして、あったいう間に修正されました。
+そして、あったいう間に 1.8.7 と同じ動作に修正されました。
 
 <<click>>
 
@@ -1262,6 +1301,8 @@ This is the MacRuby Mailing List's address.
 <<click>>
 
 = Conclusion
+
+私のプレゼンテーションのまとめです。
 
 <<click>>
 

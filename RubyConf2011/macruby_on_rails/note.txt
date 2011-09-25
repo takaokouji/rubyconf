@@ -1200,7 +1200,7 @@ TOR_TODO:
 
 しかし、喜んでいたのもつかの間で、私は定数探索に関するとても難しいエラー
 を見つけました。
-However, I found a behavior that is complex to implement.
+However after enjoying a brief victory, I soon found a new and difficult issue related to constant lookup.
 
 <<click>>
 
@@ -1218,88 +1218,87 @@ On line two, we define constant B under module A.
 
 <<click>>
 
-On line five, we specify module A as receiver, and perform
-class_eval with block.
+On line five, we specify module A as receiver, and call
+class_eval with a do-end block.
 
 <<click>>
 
 On line six, we are inside
-class_eval block, so current receiver is module A.
-Therefore, we define class method f of module A. 
+the class_eval block, so the current receiver is module A.
+Therefore, we this means that we are defining the class method f of module A.
 
 <<click>>
 
-On line seven, we output Constant B to standard output.
+On line seven, we output the constant B to the standard output.
 
 <<click>>
 
-On line eleven, we perform method f of module A.
-Then we're looking up constant B to output.
+And, on line eleven, we call method f of module A.
+This means that we are going to have to look up constant B.
 
 <<click>>
 
 このとき、最初にこの枠の範囲から定数Bを探索します。
-Now, we are going to look for constant B within the green frame.
+We are now using the patched MacRuby which implements Lexical scope.
+TODO: この追加を確認してくださ〜い。
+This means that we are going to start looking for constant B within the green frame.
 
 そして、見つからないため、Object、つまりトップレベルから定数Bを探索します。
-And we fail.
-Then, we are going to look for constant B from Object.
-It also means we are going to look for constant B that is defined at top level.
+Naturally we fail to find B within the green frame.
+So we want to continue our search for B. This time we look in Object for constant B.
+This also means that we are going to look for a constant called B that is defined at top level.
 
 <<click>>
 
 ここで注意が必要です。
-Please be careful.
+Here I would like to add a word of caution.
 
 class_evalのレシーバは、定数の探索範囲に含みません。これはRubyの言語仕様です。
-'class_eval' doesn't add receiver(A) to constant lookup scope.
-This is a Ruby's speficication.
+'class_eval' does not add it's own receiver(A) to the constant lookup scope.
+And this behavior is part of Ruby's specification.
 
 そして、両方とも見つからないため、定数Bの探索に失敗すると思ったのですが、
-So, I thought that we failed to look for constant B,
+So, I expected that the search for constant B would fail.
 
 <<click>>
 
 = A very complex bug (part 2)
 
-TOR_TODO:
-
 なんと、cRuby 1.9 ではAからも探索してしまい、定数Bを見つけてしまったのです。
-Wow, cRuby 1.9 are looking for constant B from module A. Then it succeeded.
+Surprisingly, cRuby 1.9 found constant B in module A.
+So it succeeded to find the constant B,
+even though it should fail according to the Ruby specification.
 
 <<click>>
 
 でも、Ruby 1.8.7 は私の想像通り、定数Bの探索に失敗します。
-But, Ruby 1.8.7 failed.
+On the other hand Ruby 1.8.7 worked as expected, and failed to find the constant B.
 
 当然、MacRuby もこのように動作します。
-MacRuby is same.
+MacRuby failed as well.
 
 困った私は matz に相談しました。
-So, I asked matz advice for about this behavior.
+So, I asked Matz for advice about this issue.
 
 <<click>>
 
 その結果、これは Ruby 1.9 のバグだということになりました。
-He said this is a cRuby 1.9 bug.
+He said this is a bug in cRuby 1.9.
 
 そして、あったいう間に 1.8.7 と同じ動作に修正されました。
-Then, cRuby 1.9 behavior fixed as Ruby 1.8.7 soon.
-
+And soon thereafter, cRuby 1.9's behavior was fixed to match the behavior of Ruby 1.8.7.
 <<click>>
 
 = Demo
 
-TOR_TODO:
-
 さぁ、それではみなさんに実際の成果をお見せするときがきました。
-OK, then let's show result to all of you.
+OK, it's time to show you the result of my work.
 
 MacRuby で Rails を動作させます。
 Making Rails works on MacRuby.
 
 ここでは、Rails のバージョンは少し古いのですが 3.0.7 です。
-At this time, we use Rails version 3.0.7 that is bit old.
+I will demonstrate Ruby on Rails running on MacRuby. I am using Rails 3.0.7, which is a bit old.
 
 (デモを開始)
 
@@ -1307,18 +1306,24 @@ At this time, we use Rails version 3.0.7 that is bit old.
 
 = #1390 rb_vm_prepare_block
 
-Actually,
-MacRuby aborts
-if you click "About your application’s environment" link in Welcome page.
+This looks all fine and good.
+But unfortunately,
+the server will abort if you click this link on the welcome page.
 
-Hmm, working Rails on MacRuby is more difficult
-than to implement lexical constant lookup, isn't it?
+SLIDE_TODO: 「Click here」＞「CLICK!」
+「Abort when I pressed "About your application’s environment"」＞「Abort if the "About your application’s environment" is link is clicked."
+
+Hmm, there is still work to be done.
+TODO: 追加の確認をおねがいします。
+
+And making Rails work on MacRuby is more difficult
+than I expected, perhaps even more difficult than implementing lexical constant lookup.
 
 <<click>>
 
 = The MacRuby train trip continues ...
 
-The MacRuby train trip continues ...
+So, The MacRuby train trip continues ...
 Everyone, please get on board.
 
 <<click>>
@@ -1341,10 +1346,8 @@ This is the MacRuby Mailing List's address.
 
 = Conclusion
 
-TOR_TODO:
-
 私のプレゼンテーションのまとめです。
-Let me explain this presentation conclusion.
+So, I would like to conclude this presentation with a quick summary of what I have said so far.
 
 <<click>>
 
@@ -1369,8 +1372,6 @@ If you have a question, please ask me, but if possible please speak slowly.
 
 = Acknowledgement
 
-TOR_TODO:
-
 Last of all,
 
 I would like to express my gratitude toward the RubyConf hosts and organizers
@@ -1387,7 +1388,7 @@ TODO:
 And finally,
 I would like to thank my everyone here,
 for patiently listening to this presentation,
-despite my clumsy English.
+despite my limited English.
 
 <<click>>
 

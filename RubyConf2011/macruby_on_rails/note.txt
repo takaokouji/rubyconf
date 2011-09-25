@@ -7,7 +7,7 @@ Introduction
 
 This is the manuscript for my presentation "MacRuby on Rails" for RubyConf2011.
 
-On the day of the presentation
+On the day of the presentation,
 I will generally speak as is written in this manuscript.
 
 = MacRuby on Rails
@@ -54,7 +54,7 @@ And I work as the leader of small team.
 I develop open source software during my spare time.
 
 I'm a MacRuby and cRuby committer.
-In MacRuby, I am in charge of some of the Core parts.
+In MacRuby, I am in charge of some of the core parts.
 In cRuby, I am in charge of the Readline module.
 
 <<click>>
@@ -340,6 +340,7 @@ Actually, we could say that MacRuby exists in order to allow us to use Cocoa.
 <<click>>
 
 = MacRuby x Cocoa
+TODO: スライド側は大文字のXだけどこっちは小文字ですか。「かけさん」だったら小文字がいいかなと思います。--Tor
 
 Well then, let's look at an example of how we can use Cocoa from MacRuby.
 
@@ -439,7 +440,7 @@ Then it failed.
 
 <<click>>
 
-And, to start up the server too.
+And starting up the server failed too.
 
 After all Rails didn't work on MacRuby.
 
@@ -457,7 +458,7 @@ First, I run Rails.
 <<click>>
 
 As the next step I see where it fails.
-For instance, segmentation faults, abort
+For instance, segmentation faults, aborted
 programs and so on.
 
 <<click>>
@@ -492,6 +493,7 @@ to do so for cRuby.
 <<click>>
 
 = The Fixed Issues
+SLIDE_TODO: "The Fixed Issues"を"A couple of examples of what I have fixed so far"にしたらどうですか？
 
 Now, I would like to discuss a couple the issues that I fixed in MacRuby.
 
@@ -512,13 +514,14 @@ This error can be reproduced by this code.
 
 If you run this code, then the following error will occur.
 
-Let me explain the reason.
+Let me try to explain the reason.
 
 <<click>>
 
 = Exception
 
-First, I want to explain how exception handling is done on MacRuby.
+First, we need to know a little bit about how exception handling is done in MacRuby.
+TODO:これ以降のスライドの題名は「Exception」ですが、「Exception Handling」にしたほうがいいと思います。
 
 <<click>>
 
@@ -540,11 +543,11 @@ We call this stack the Exception Stack.
 
 <<click>>
 
-On line 3, we rescuing exception A and continue the execution.
+On line 3, we rescue exception A and continue execution.
 
 <<click>>
 
-On line 5, inside the rescue block, we raise the exception B.
+On line 5, inside the rescue block, we raise exception B.
 
 <<click>>
 
@@ -563,7 +566,7 @@ so MacRuby pops one exception of the stack.
 
 And on line 8,
 we reach the end of the outer rescue block,
-and again we pop an exception off the Exception stack.
+and again we pop an exception from the Exception stack.
 
 So, now we're done handling all the exceptions raised by this program.
 And the Exception stack is empty.
@@ -574,10 +577,8 @@ This is the way that MacRuby stores and processes exceptions.
 
 = Exception and catch / throw
 
-TOR_TODO:
-
 次に、例外処理と catch / throw を組み合わせたときの実現方法を説明します
-So let's look at how exeption handling is carried when we used in combination with catch and throw.
+So let's look at how exception handling is carried out when in combination with catch and throw.
 
 <<click>>
 
@@ -586,26 +587,25 @@ Have a look at this code.
 
 このプログラムでは例外が発生したあとで、throwによってcatchまでジャンプ
 しています。
-TOR_TODO:bookmark
 In this program,
-we defines a labeled block using 'catch'.
-And we raise and rescue in the block.
-Then we jump out the block using 'throw'.
+we define a catch block labeled "foo".
+Inside the catch block we have a begin-rescue where we raise an exception.
+And in the rescue block we use "throw" to jump out ouf the begin-rescue.
+TODO:これであったますか？trowによってどこに飛ぶかはわからないのでそれを避けました。
 
 先ほどと同様に、Exception Stackの内容に着目しながら、このプログラムを
 MacRubyで実行したときの様子を見てみましょう。
-Let's look at what happens when we run this program on MacRuby
-attention to the Exception Stack.
+Let's step through the execution again to see what happens in the MacRuby Exception stack, just like we did in the last example.
 
 <<click>>
 
 1行目で、:fooを指定してcatchを実行しています。
-On line 1, we defines a labeled block using 'catch'.
+On line 1, we define a labeled block using 'catch'.
 
 catchに指定したブロックの中で:fooを指定してthrowを実行すると、
 catchのブロックを抜け出すことが出来ます。
-After that, if we call 'throw' with foo symbol argument, 
-then we jump out the block.
+After that, if we call 'throw' with symbol foo as an argument,
+then we jump out of the block.
 
 <<click>>
 
@@ -617,37 +617,35 @@ So, it is pushed onto the stack.
 <<click>>
 
 4行目で、その例外をrescueして、処理を続けています。
-On line 4, we rescue exception A and continue executing the code.
+On line 4, we rescue exception A and continue execution.
 
 <<click>>
 
 5行目で、:fooを指定してthrowを呼び出しています。
-On line 5, we call 'throw' with foo symbol argument.
+On line 5, we call 'throw' with symbol foo as the argument.
 
 <<click>>
 
 その結果、catchのブロックを抜け出します。
-So, we jump out the labeled block.
+So, we jump out of the labeled block.
 
 <<click>>
 
 このとき、例外スタックから例外を1つ取り除きます。
-Then, MacRuby pops one exception of the stack.
+Then, MacRuby pops exception A from the stack.
 
 このように、MacRubyでは、throwでも例外スタックから例外を取り除きます。
-In this way, MacRuby do so when we call 'throw'.
-
+So this is how throw takes out exceptions from the stack in MacRuby.
 <<click>>
 
 = throw
 
-TOR_TODO:
-
 当時のMacRubyのthrowの実装はこのようになっていました。
-TOR_TODO: The MacRuby's 'throw' implementation at that time was like this.
+Before I patched it, MacRuby's 'throw' was implemented as you can see here.
 
 throwの実装は ソースコードvm.cppの4321行付近にあります。
-This is near line 4321(four three two one) in vm.cpp.
+This code is from vm.cpp.
+TODO:行数まで言わなくていい気がします。
 
 throwはC++で実装されています。
 'throw' is implemented in C++.
@@ -655,26 +653,26 @@ throwはC++で実装されています。
 <<click>>
 
 current_exception()関数は、例外スタックの一番上に積まれている例外を返します。
-current_exception() function returns a top of exception of the stack.
+The current_exception() function returns the topmost exception from the stack.
 
 <<click>>
 
 pop_current_exception()関数は、例外スタックから例外を一つ取り除きます。
-pop_current_exception() function pops one exception of the stack.
+And, the pop_current_exception() function pops one exception off the stack.
 
 <<click>>
 
 = #860 catch/throw
-
-TOR_TODO:
 
 それでは、もう一度、今回の問題の再現コードを見てみましょう。
 Now, have a look at the code that reproduces the error once again.
 
 先ほどと同様に、Exception Stackの内容に着目しながら、このプログラムを
 MacRubyで実行したときの様子を見てみましょう。
-Let's look at what happens when we run this program on MacRuby
+Let's look at what happens when we run this program on MacRuby while
 attention to the Exception Stack.
+TODO: 毎回と同じなので、この文書はこれで言わなくていいと思います。
+SLIDE_TODO: スライド１１９は必要ないですかね？
 
 <<click>>
 
@@ -682,12 +680,12 @@ attention to the Exception Stack.
 それを例外スタックに追加します。
 On line 2,
 we raise exception A.
-So, it is pushed onto the stack.
+So, exception A is pushed onto the stack.
 
 <<click>>
 
 3行目で、その例外をrescueして、処理を続けています。
-On line 3, we rescue exception A and continue executing the code.
+On line 3, we rescue exception A and continue executing.
 
 <<click>>
 
@@ -719,8 +717,24 @@ Therefore, MacRuby aborts.
 
 <<click>>
 
+=TODO
+
+ 「How to fix」までの説明はもうスライドからなくなっているけど、どうしますか？この説明がなければ、Railsとのつながりがちょっと薄くなるきがします。
+
+ここでこのような内容のスライドあったらいいかもしれないです。
+
+1. MacRuby previously assumed the following way of writing exception handling.
+想定された構造のスライド
+2. But Rails breaks this assumption by using catch-foo inside a rescue clause
+エラーを発生させるコード
+3. So running Rails on MacRuby has exposed a weakness in MacRuby's exception handling.
+
+これだったら、次の「じゃどう直せばいい」という話へにつながりも大丈夫だと思います。そして、以下のHow to fixまでの文を消してしまってもいいとおもいます。
+
+=END
+
 みなさんもお気付きのように、この問題の原因は 4 行目の throw で例外を取り除いてしまったことです。
-As you see all of you are
+As you can probably see, 
 that the cause of the error has poped one exception of the stack
 on line 4.
 
@@ -752,94 +766,102 @@ let's look at what happens when we run this program on MacRuby after we fixed th
 <<click>>
 
 3行目までは、先ほどと同じように動作します。
-To line 3, we work in the same way as a while ago.
+Up until line 3, things work as they always did.
 
 <<click>>
 
 4行目で、まず、catchを実行したときに、例外スタックの一番上に積まれている例外を記録しておきます。ここでは例外"A"を記録します。
-On line 4,
-we call 'catch',
-then we record a top of exception of the stack.
-Now, it is exception A.
+However, now things work a bit different from line 4.
+Now, when we call 'catch',
+then we store a record of what is at the top of the exception stack.
+In this case, exception A.
 
 <<click>>
 
 次に、throwを実行したときに、catchで記録した例外と、例外スタックの一番上に積まれている例外を比較します。
-Next, we call 'throw'. Then we compare the recorded exception with a top of exception of the stack.
+Next, when we call 'throw', we compare the exception that we stored, with the exception at the top of the exception stack.
+TODO:若干省略しましたが、どうですか？
 
 それらが等しければ何もしません。
-If these are same, then MacRuby do nothing.
+If these two exceptions are the same, then MacRuby doesn't do anything.
 
 それらが違っていたら例外スタックから例外を取り除きます。
-If these are different, then MacRuby pops one exception of the stack.
+If they are different, then MacRuby pops one exception off the stack.
 
 ここでは、どちらも例外"A"なので何もしません。
-Now, these are same, so MacRuby do nothing.
+Now, in this case, they are the same, so MacRuby doesn't do anything.
 
 <<click>>
 
 5行目で、例外スタックから例外を1つ取り除きます。
-On line 5, MacRuby pops one exception of the stack.
+On line 5, MacRuby pops an exception from the stack.
 
 そして、例外スタックは空の状態になります。
-And the stack is empty.
+And then the stack is empty.
+
+So this is how the new implementation of throw works.
 
 <<click>>
 
 = How to fix (part 2)
 
-TOR_TODO:
-
 これをthrowに実装したのがこのコードです。
-It is this code to have implemented this in throw.
+This is the fixed implementation of throw.
+
+SLIDE_TODO:
+「I changed the implementation so that MacRuby only pop Exceptions if it needs to.(60723bf)」を「In the new implementation, MacRuby
+only pops exceptions when necessary (60723bf)」にしたほうが自然かなと思います。そして、喋りに
+
+So, I changed the implementation so that MacRuby only pops exceptions when needed.
+
 
 <<click>>
 
 この部分で、catchで記録した例外と例外スタックの一番上に積まれている例外を比較しています。
-In this part,
-MacRuby compare the recorded exception by 'catch' with top of exception of the stack.
+So, the code in the green frame is where we compare the stored exception with the exception at the top of the stack.
 
 <<click>>
 
 この部分は、例外スタックの一番上に積まれている例外を取り除いています。
-In this part, MacRuby pops one exception of the stack.
+And in this part, MacRuby pops one exception off the stack.
+
+So in short, we keep popping exceptions off the stack until the while condition turns false, or in other words until we reach the recorded exception.
+TODO:まとめる文書を追加しましたので、ご確認ください。
 
 <<click>>
 
 = #860 Fixed
 
-TOR_TODO:
-
 最後に、もう少し複雑なコードで修正後のMacRubyの動作を確認してみましょう。
 Finally,
-let's look at what happens when we run more complex program on MacRuby after we fixed the error.
+let's look at what happens when we run a more complex program on MacRuby with the fixed implementation of throw.
 
 <<click>>
 
 2行目で、例外が発生します。それを例外スタックに追加します。
 On line 2,
 we raise exception A.
-So, it is pushed onto the stack.
+TODO:せっかくなので、2行目に矢印があるスライドを。。。
+
+So, exception A is pushed onto the stack.
 
 3行目で、その例外をrescueして、処理を続けています。
 On line 3, we rescue exception A and continue executing the code.
 
 4行目で、catchを実行します。このとき、例外"A"を記録します。
 On line 4,
-we call 'catch',
-then we record exception A.
+we call 'catch' and store exception A.
 
 <<click>>
 
 6行目で、例外が発生します。それを例外スタックに追加します。
 On line 6,
-we raise exception B.
-So, it is pushed onto the stack.
+we raise exception B and push it onto the stack.
 
 <<click>>
 
 7行目で、その例外をrescueして、処理を続けています。
-On line 7, we rescue exception B and continue executing the code.
+On line 7, we rescue exception B and continue execution.
 
 8行目で、throwを実行します。
 On line 8, we call 'throw'.
@@ -853,30 +875,31 @@ Then we compare the recorded exception A with exception B of the stack.
 These are different, so MacRuby pops exception B of the stack.
 
 もう一度、catchで記録した例外"A"と例外スタックの一番上の例外"A"を比較します。
-Then, again we compare the recorded exception A with exception A of the stack.
+Then, we compare the recorded exception A with the new top of the stack, which is now exception A.
 
 それぞれが等しいため何もしません。
-These are same, so MacRuby do nothing.
+These are same, so MacRuby doesn't do anything.
 
 <<click>>
 
 そして、catchのブロックを抜けます。
-Then, we jump out the labeled block.
+Then, we jump out the labeled catch block.
+TODO:確認おねがいします。
 
 <<click>>
 
 11行目で、例外スタックから例外を1つ取り除きます。
-On line 11, MacRuby pops one exception of the stack.
+On line 11, MacRuby pops one exception of the stack, and the program finishes without aborting.
 
 私は、このようにして、この問題を修正しました。
-This is the way that I fixed this error.
+So this is how I fixed the problem.
 
 <<click>>
 
 = #1192 Constant lookup
 
-Next, let's look at another example of how I fixed MacRuby,
-the Trac Issue number 1192 (one one nine two),
+Next, let's look at another example of how I fixed MacRuby.
+This time we'll look at Trac Issue number 1192 (one one nine two),
 which is related to Constant Lookup in MacRuby.
 
 The issue was that MacRuby failed 
@@ -912,7 +935,7 @@ the constant lookup would fail in MacRuby.
 
 To really understand this issue,
 you must have a detailed understanding of how constant lookup works in Ruby.
-And this is one of the parts of Ruby's language specification that quite hard to understand.
+Constant lookup is one of the parts of Ruby's language specification which is quite hard to understand.
 
 And in most cases,
 you can get along quite fine without knowing the details of constant lookups in Ruby.

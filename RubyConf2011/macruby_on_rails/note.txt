@@ -1181,7 +1181,7 @@ SLIDE_TODO: More than 3000 lines of code changed.
 で私にこう書きました。
 When I finally managed to fix this error,
 Laurent who is a main developer of MacRuby,
-said to me that,
+wrote the following to me,
 
 <<click>>
 
@@ -1190,7 +1190,7 @@ Laurent S.
 it's official, kouji is the hero of the day/week/month/...? his patch seems to fix remaining lexical const lookup bugs :)
 
 私はとてもうれしかったです。
-I had been very happy!!
+And that made me very happy!!
 
 <<click>>
 

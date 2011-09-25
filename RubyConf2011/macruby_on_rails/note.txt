@@ -935,10 +935,10 @@ the constant lookup would fail in MacRuby.
 
 To really understand this issue,
 you must have a detailed understanding of how constant lookup works in Ruby.
-Constant lookup is one of the parts of Ruby's language specification which is quite hard to understand.
+I think that constant lookup is one of the parts of Ruby's language specification that are quite hard to understand.
 
 And in most cases,
-you can get along quite fine without knowing the details of constant lookups in Ruby.
+you can get along quite fine without knowing anything about this area.
 
 <<click>>
 
@@ -960,7 +960,7 @@ On line 3, we define a constant called CONST in module B.
 <<click>>
 
 On line 4,
-we re-open the top-level module A,
+we re-open the top-level module A.
 in other words,
 the module A that we defined in line 1.
 
@@ -977,7 +977,7 @@ cRuby would look for the constant CONST within the green frame.
 
 We call the scope represented by the green frame for "Lexical Scope"
 
-And, cRuby would find the constant CONST that is defined in module B.
+And, cRuby would find the CONST that is defined in module B.
 
 <<click>>
 
@@ -1002,6 +1002,7 @@ Therefore, CONST cannot be found.
 <<click>>
 
 = Constant Lookup is complex
+SLIDE_TODO: どんな実装、またはどんな仕様の定数検索の話かをスライドにはっきりかくといいと思います。
 
 Next,
 we have an example with class_eval.
@@ -1011,7 +1012,7 @@ Constant lookup becomes even more complex when we use class_eval.
 <<click>>
 
 The behavior changes
-whether we pass a block or a string as the argument to class_eval.
+depending on whether we pass a block or a string as the argument to class_eval.
 
 In the code example on the left hand we pass a block.
 
@@ -1025,7 +1026,7 @@ Except for the different arguments, the two examples are identical.
 
 TOR_TODO:
 
-First, I'll explain about calling class_eval with a Block.
+First, I'll explain about calling class_eval with a block.
 Let me explain this code sequentially from the top.
 
 <<click>>
@@ -1042,21 +1043,19 @@ On line 3, we define method f.
 
 <<click>>
 
-On line 4, we pass the block to class_eval.
+On line 4, we pass a block to class_eval.
 
 <<click>>
 
-On line 5, we print the content of the constant CONST to the standard output.
+On line 5, we print the content of CONST to the standard output.
 
 <<click>>
 
 On line 6, we close the class_eval block.
 
-So, when we call method f, then line four to six gets executed.
+So, when we call method f, then line four to six will get executed.
 
 <<click>>
-
-Let's jump a bit forward to line 10.
 
 On line 10, we define class K.
 
@@ -1075,71 +1074,76 @@ On line 13, we call module A's f method.
 As a result, the code in line 4 to 6 is called.
 
 このときの定数CONSTを最初に探索する範囲がわかりますか？
-Do you understand a scope looking for constant CONST of this time first?
+So, can you tell what the constant lookup scope is in this case?
+TODO:「最初に」は重要ですか？それとも、この修正でいいですか？
 
 <<click>>
 
 これは簡単ですね。
-This is easy.
+In this case it is easy to tell.
 
 この枠の範囲から最初に定数CONSTを探索します。
-we look for the constant CONST within the green frame.
+We look for the constant CONST within the green frame.
 
 <<click>>
 
-Therefore, 'p method' outputs the string "A's CONST".
+So in this case the 'p' outputs the string "A's CONST"ｄ
 
 <<click>>
 
 = class_eval(String)
 
-TOR_TODO:
-
 次に、文字列を渡す場合についてです。
-Next, about performing class_eval with String.
+Next, let's look at performing class_eval with a string argument.
 
 先ほどのものとの違いは4〜6行目だけです。
-The difference with the thing like the point is only 4(four) to 6(six) lines.
+The code example only differs on line 4(four) to 6(six).
 
 4行目で、class_evalを文字列を渡して呼び出します。
-On line 4, we pass the string to class_eval.
+On line 4, we pass a string to class_eval in the form of a HERE document.
 
 5行目で、定数CONSTを標準出力に出力します。
-On line 5, we print the content of the constant CONST to the standard output.
+On line 5, we print the content of CONST.
 
 6行目で、ヒアドキュメントの終端です。
-On line 6, we close the here document.
+On line 6, we close the HERE document.
 
 そして、13行目で、module Aのメソッドfを呼び出します。
-Finally, on line 13, we call module A's f method.
+Just as before, we call module A's f method on line 13.
 
 このときの定数CONSTを最初に探索する範囲がわかりますか？
-Do you understand a scope looking for constant CONST of this time first?
+So, can you tell what the constant lookup scope is in this case?
+TODO:「最初に」は重要ですかね
 
 <<click>>
 
 実はこの枠の範囲です。
-Actully, we look for the constant CONST within the green frame.
+Actually, on MacRuby, we would look for CONST within this green frame.
+TODO:これはMacRubyの挙動であってますか？
+
 
 この理由を説明します。
-Let me explain this reason.
+Let me explain the reason.
 
 メソッドfの実行時に、class_evalに渡された文字列をパーズ・解釈します。
 When we call module A's f method,
-we parse and evaluate the string that is passed class_eval.
+we parse and evaluate the string that is passed to class_eval.
+TODO：この辺(この文＋３）は相談させてください。ちょっと曖昧さがあるので、正しい翻訳はむずかしいです。
 
 そのときに定数の探索範囲を決定します。
-Then, we determine a scope looking for constant CONST.
+And, the scope in which we look for CONST is determined when to be the scope in which the method f is run.
 
 その結果、13行目の周辺が、定数の探索範囲となります。
-Therefore, the scope determines around line 13.
+Therefore, the lookup scope becomes determine around line 13.
 
 このような実行時にかわる範囲のことをdynamic scopeといいます。
-We call the scope represented by the green frame for "Dynamic Scope"
+We call the scope represented by the green frame for "Dynamic Scope".
+
+
 
 <<click>>
 
-Therefore, 'p method' outputs the string "K's CONST".
+So in this case the 'p' outputs the string "A's CONST"ｄ
 
 <<click>>
 
@@ -1148,33 +1152,35 @@ Therefore, 'p method' outputs the string "K's CONST".
 TOR_TODO:
 
 最後にそれぞれを並べてみましょう。
-Finally, let me display each.
+So lets look at the two cases together.
 
 class_evalに渡す引数が違うだけで、定数の探索範囲はこのように違ってきます。
-The scope looking for constant are different in this way only by arguments to pass class_eval being different.
+We can see that the scope of the constant lookup differs greatly depending on the kind of argument passed to class_eval.
 
 <<click>>
 
 = Manage somehow
+SLIDE_TODO:「Manage somehow」＞「I somehow managed to fix this」　ここの日本語を聞かせてください。あまりいい題名を思いつかないです。
 
-TOR_TODO:
 
 このように複雑な定数探索の問題を修正するのは、簡単ではありませんでした。
 It was not easy to fix this error.
 
 2回のやり直しがありました。そして、3回目でようやく修正できました。
-There were two times of fresh starts.
-And I was able to finally fix it with the third.
+I had to start over twice.
+And I was finally able to find a satisfactory solution in the third attempt.
+SLIDE_TODO:　Three attempts to get it right.
 
 <<click>>
 
 ソースコードの修正は3000行以上になりました。
-The corrections of the source code became more than 3,000 lines.
+I edited more than 3000 lines of code.
+SLIDE_TODO: More than 3000 lines of code changed.
 
 この修正が完了したとき、MacRubyのメイン開発者であるLaurentは、チャット
 で私にこう書きました。
-When I fixed this error,
-Laurent which is a main developer of MacRuby,
+When I finally managed to fix this error,
+Laurent who is a main developer of MacRuby,
 said to me that,
 
 <<click>>

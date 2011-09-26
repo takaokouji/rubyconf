@@ -340,7 +340,6 @@ Actually, we could say that MacRuby exists in order to allow us to use Cocoa.
 <<click>>
 
 = MacRuby x Cocoa
-TODO: スライド側は大文字のXだけどこっちは小文字ですか。「かけさん」だったら小文字がいいかなと思います。--Tor
 
 Well then, let's look at an example of how we can use Cocoa from MacRuby.
 
@@ -492,8 +491,7 @@ to do so for cRuby.
 
 <<click>>
 
-= The Fixed Issues
-SLIDE_TODO: "The Fixed Issues"を"A couple of examples of what I have fixed so far"にしたらどうですか？
+= A couple of examples of what I have fixed so far
 
 Now, I would like to discuss a couple the issues that I fixed in MacRuby.
 
@@ -514,14 +512,18 @@ This error can be reproduced by this code.
 
 If you run this code, then the following error will occur.
 
+This kind of exception handling is used by Bundler.
+So, in order to make rails work,
+we need to fix this error.
+
 Let me try to explain the reason.
 
 <<click>>
 
-= Exception
+= Exception Handling
 
-First, we need to know a little bit about how exception handling is done in MacRuby.
-TODO:これ以降のスライドの題名は「Exception」ですが、「Exception Handling」にしたほうがいいと思います。
+First,
+we need to know a little bit about how exception handling is done in MacRuby.
 
 <<click>>
 
@@ -575,202 +577,129 @@ This is the way that MacRuby stores and processes exceptions.
 
 <<click>>
 
-= Exception and catch / throw
+= Exception Handling and catch / throw
 
-次に、例外処理と catch / throw を組み合わせたときの実現方法を説明します
-So let's look at how exception handling is carried out when in combination with catch and throw.
+So let's look at
+how exception handling is carried out when in combination with catch and throw.
 
 <<click>>
 
-このコードを見てください。
 Have a look at this code.
 
-このプログラムでは例外が発生したあとで、throwによってcatchまでジャンプ
-しています。
 In this program,
 we define a catch block labeled "foo".
 Inside the catch block we have a begin-rescue where we raise an exception.
 And in the rescue block we use "throw" to jump out ouf the begin-rescue.
-TODO:これであったますか？trowによってどこに飛ぶかはわからないのでそれを避けました。
 
-先ほどと同様に、Exception Stackの内容に着目しながら、このプログラムを
-MacRubyで実行したときの様子を見てみましょう。
-Let's step through the execution again to see what happens in the MacRuby Exception stack, just like we did in the last example.
+Let's step through the execution again to see what happens in the MacRuby Exception stack,
+just like we did in the last example.
 
 <<click>>
 
-1行目で、:fooを指定してcatchを実行しています。
 On line 1, we define a labeled block using 'catch'.
 
-catchに指定したブロックの中で:fooを指定してthrowを実行すると、
-catchのブロックを抜け出すことが出来ます。
 After that, if we call 'throw' with symbol foo as an argument,
 then we jump out of the block.
 
 <<click>>
 
-3行目で、例外が発生します。それを例外スタックに追加します。
 On line 3,
 we raise exception A.
 So, it is pushed onto the stack.
 
 <<click>>
 
-4行目で、その例外をrescueして、処理を続けています。
 On line 4, we rescue exception A and continue execution.
 
 <<click>>
 
-5行目で、:fooを指定してthrowを呼び出しています。
 On line 5, we call 'throw' with symbol foo as the argument.
 
 <<click>>
 
-その結果、catchのブロックを抜け出します。
 So, we jump out of the labeled block.
 
 <<click>>
 
-このとき、例外スタックから例外を1つ取り除きます。
 Then, MacRuby pops exception A from the stack.
 
-このように、MacRubyでは、throwでも例外スタックから例外を取り除きます。
 So this is how throw takes out exceptions from the stack in MacRuby.
+
 <<click>>
 
 = throw
 
-当時のMacRubyのthrowの実装はこのようになっていました。
 Before I patched it, MacRuby's 'throw' was implemented as you can see here.
 
-throwの実装は ソースコードvm.cppの4321行付近にあります。
 This code is from vm.cpp.
-TODO:行数まで言わなくていい気がします。
 
-throwはC++で実装されています。
 'throw' is implemented in C++.
 
 <<click>>
 
-current_exception()関数は、例外スタックの一番上に積まれている例外を返します。
 The current_exception() function returns the topmost exception from the stack.
 
 <<click>>
 
-pop_current_exception()関数は、例外スタックから例外を一つ取り除きます。
 And, the pop_current_exception() function pops one exception off the stack.
 
 <<click>>
 
 = #860 catch/throw
 
-それでは、もう一度、今回の問題の再現コードを見てみましょう。
 Now, have a look at the code that reproduces the error once again.
-
-先ほどと同様に、Exception Stackの内容に着目しながら、このプログラムを
-MacRubyで実行したときの様子を見てみましょう。
-Let's look at what happens when we run this program on MacRuby while
-attention to the Exception Stack.
-TODO: 毎回と同じなので、この文書はこれで言わなくていいと思います。
-SLIDE_TODO: スライド１１９は必要ないですかね？
 
 <<click>>
 
-2行目で、例外が発生します。
-それを例外スタックに追加します。
 On line 2,
 we raise exception A.
 So, exception A is pushed onto the stack.
 
 <<click>>
 
-3行目で、その例外をrescueして、処理を続けています。
 On line 3, we rescue exception A and continue executing.
 
 <<click>>
 
-4行目で、catch と throw を実行します。
 On line 4, we call 'catch' and 'throw'.
 
 <<click>>
 
-throw の実行時に、例外スタックから例外を1つ取り除きます。
 Then, MacRuby pops one exception of the stack.
-
-そして、例外スタックは空の状態になります。
 And the stack is empty.
 
 <<click>>
 
-5行目で、rescue節を含むendに到達したので例外スタックから例外を1つ取り除こうとします。
 On line 5,
 we reach the end of the outer rescue block,
 and again we pop an exception off the stack.
 
-しかし、例外スタックは空になっています。
 However, the stack is empty.
 
 <<click>>
 
-その結果、abort してしまうのです。
 Therefore, MacRuby aborts.
 
 <<click>>
 
-=TODO
-
- 「How to fix」までの説明はもうスライドからなくなっているけど、どうしますか？この説明がなければ、Railsとのつながりがちょっと薄くなるきがします。
-
-ここでこのような内容のスライドあったらいいかもしれないです。
-
-1. MacRuby previously assumed the following way of writing exception handling.
-想定された構造のスライド
-2. But Rails breaks this assumption by using catch-foo inside a rescue clause
-エラーを発生させるコード
-3. So running Rails on MacRuby has exposed a weakness in MacRuby's exception handling.
-
-これだったら、次の「じゃどう直せばいい」という話へにつながりも大丈夫だと思います。そして、以下のHow to fixまでの文を消してしまってもいいとおもいます。
-
-=END
-
-みなさんもお気付きのように、この問題の原因は 4 行目の throw で例外を取り除いてしまったことです。
 As you can probably see, 
-that the cause of the error has poped one exception of the stack
-on line 4.
-
-The issue does not occur, as long as you don't break this assumption.
-
-With this exception handling structure, if we reach end, then it means that throw was NOT executed. On the other hand if throw is executed, then we break out of the begin rescue end block before we reach end.
-
-In other words, this structure ensures that you never pop more than one exception from the stack.
-
-しかし、Railsではこの前提が崩れてしまった。
-However, this assumption does not hold true in Rails.
-
-そのため動かなかった。
-So, this caused an error when running Rails on MacRuby.
+that the cause of the error has poped one exception of the stack on line 4.
 
 <<click>>
 
 = How to fix
 
-TOR_TODO:
-
-この問題の修正方法を説明します。
 Let me explain how to fix the error.
 
-まずは、修正後のプログラムの動作を見てみましょう。
 First,
 let's look at what happens when we run this program on MacRuby after we fixed the error.
 
 <<click>>
 
-3行目までは、先ほどと同じように動作します。
 Up until line 3, things work as they always did.
 
 <<click>>
 
-4行目で、まず、catchを実行したときに、例外スタックの一番上に積まれている例外を記録しておきます。ここでは例外"A"を記録します。
 However, now things work a bit different from line 4.
 Now, when we call 'catch',
 then we store a record of what is at the top of the exception stack.
@@ -778,25 +707,19 @@ In this case, exception A.
 
 <<click>>
 
-次に、throwを実行したときに、catchで記録した例外と、例外スタックの一番上に積まれている例外を比較します。
-Next, when we call 'throw', we compare the exception that we stored, with the exception at the top of the exception stack.
-TODO:若干省略しましたが、どうですか？
+Next, when we call 'throw', we compare the exception that we stored,
+with the exception at the top of the exception stack.
 
-それらが等しければ何もしません。
 If these two exceptions are the same, then MacRuby doesn't do anything.
 
-それらが違っていたら例外スタックから例外を取り除きます。
 If they are different, then MacRuby pops one exception off the stack.
 
-ここでは、どちらも例外"A"なので何もしません。
-Now, in this case, they are the same, so MacRuby doesn't do anything.
+Now, in this case,
+they are the same, so MacRuby doesn't do anything.
 
 <<click>>
 
-5行目で、例外スタックから例外を1つ取り除きます。
 On line 5, MacRuby pops an exception from the stack.
-
-そして、例外スタックは空の状態になります。
 And then the stack is empty.
 
 So this is how the new implementation of throw works.
@@ -805,93 +728,74 @@ So this is how the new implementation of throw works.
 
 = How to fix (part 2)
 
-これをthrowに実装したのがこのコードです。
-This is the fixed implementation of throw.
-
-SLIDE_TODO:
-「I changed the implementation so that MacRuby only pop Exceptions if it needs to.(60723bf)」を「In the new implementation, MacRuby
-only pops exceptions when necessary (60723bf)」にしたほうが自然かなと思います。そして、喋りに
-
-So, I changed the implementation so that MacRuby only pops exceptions when needed.
+So,
+I changed the implementation so that MacRuby only pops exceptions when needed.
 
 
 <<click>>
 
-この部分で、catchで記録した例外と例外スタックの一番上に積まれている例外を比較しています。
-So, the code in the green frame is where we compare the stored exception with the exception at the top of the stack.
+So,
+the code in the green frame is where we compare the stored exception with the exception at the top of the stack.
 
 <<click>>
 
-この部分は、例外スタックの一番上に積まれている例外を取り除いています。
 And in this part, MacRuby pops one exception off the stack.
 
-So in short, we keep popping exceptions off the stack until the while condition turns false, or in other words until we reach the recorded exception.
-TODO:まとめる文書を追加しましたので、ご確認ください。
+So in short,
+we keep popping exceptions off the stack until the while condition turns false,
+or in other words until we reach the recorded exception.
 
 <<click>>
 
 = #860 Fixed
 
-最後に、もう少し複雑なコードで修正後のMacRubyの動作を確認してみましょう。
 Finally,
 let's look at what happens when we run a more complex program on MacRuby with the fixed implementation of throw.
 
 <<click>>
 
-2行目で、例外が発生します。それを例外スタックに追加します。
 On line 2,
 we raise exception A.
-TODO:せっかくなので、2行目に矢印があるスライドを。。。
 
 So, exception A is pushed onto the stack.
 
-3行目で、その例外をrescueして、処理を続けています。
 On line 3, we rescue exception A and continue executing the code.
 
-4行目で、catchを実行します。このとき、例外"A"を記録します。
 On line 4,
 we call 'catch' and store exception A.
 
 <<click>>
 
-6行目で、例外が発生します。それを例外スタックに追加します。
 On line 6,
 we raise exception B and push it onto the stack.
 
 <<click>>
 
-7行目で、その例外をrescueして、処理を続けています。
 On line 7, we rescue exception B and continue execution.
 
-8行目で、throwを実行します。
 On line 8, we call 'throw'.
 
-このとき、catchで記録した例外"A"と例外スタックの一番上の例外"B"を比較します。
 Then we compare the recorded exception A with exception B of the stack.
 
 <<click>>
 
-それぞれが異なるため、例外"B"を例外スタックから取り除きます。
 These are different, so MacRuby pops exception B of the stack.
 
-もう一度、catchで記録した例外"A"と例外スタックの一番上の例外"A"を比較します。
-Then, we compare the recorded exception A with the new top of the stack, which is now exception A.
+Then, we compare the recorded exception A with the new top of the stack,
+which is now exception A.
 
-それぞれが等しいため何もしません。
 These are same, so MacRuby doesn't do anything.
 
 <<click>>
 
-そして、catchのブロックを抜けます。
-Then, we jump out the labeled catch block.
-TODO:確認おねがいします。
+Then, we jump out of the labeled catch block.
 
 <<click>>
 
-11行目で、例外スタックから例外を1つ取り除きます。
-On line 11, MacRuby pops one exception of the stack, and the program finishes without aborting.
+On line 11,
+MacRuby pops one exception of the stack,
+and the program finishes without aborting.
 
-私は、このようにして、この問題を修正しました。
 So this is how I fixed the problem.
 
 <<click>>
@@ -929,12 +833,17 @@ we only looked within class_eval's receiver object.
 And since constant B isn't defined there,
 the constant lookup would fail in MacRuby.
 
+Constant Lookup within a class_eval or module_eval argument is widely used by ActiveSupport.
+
+So, in order to make rails work,
+we need to fix this error.
+
 <<click>>
 
 = Constant Lookup
 
 To really understand this issue,
-you must have a detailed understanding of how constant lookup works in Ruby.
+you must have a detailed understanding of how constant lookup works in cRuby.
 I think that constant lookup is one of the parts of Ruby's language specification that are quite hard to understand.
 
 And in most cases,
@@ -1002,10 +911,9 @@ Therefore, CONST cannot be found.
 <<click>>
 
 = Constant Lookup is complex
-SLIDE_TODO: どんな実装、またはどんな仕様の定数検索の話かをスライドにはっきりかくといいと思います。
 
 Next,
-we have an example with class_eval.
+we have an example with class_eval in cRuby.
 
 Constant lookup becomes even more complex when we use class_eval.
 
@@ -1024,9 +932,8 @@ Except for the different arguments, the two examples are identical.
 
 = class_eval(&Block)
 
-TOR_TODO:
-
-First, I'll explain about calling class_eval with a block.
+First,
+I'll explain about calling class_eval with a block.
 Let me explain this code sequentially from the top.
 
 <<click>>
@@ -1073,16 +980,12 @@ As you can see on line 12, we extend class K with module A.
 On line 13, we call module A's f method.
 As a result, the code in line 4 to 6 is called.
 
-このときの定数CONSTを最初に探索する範囲がわかりますか？
-So, can you tell what the constant lookup scope is in this case?
-TODO:「最初に」は重要ですか？それとも、この修正でいいですか？
+So, can you tell from what scope the constant lookup starts in this case?
 
 <<click>>
 
-これは簡単ですね。
 In this case it is easy to tell.
 
-この枠の範囲から最初に定数CONSTを探索します。
 We look for the constant CONST within the green frame.
 
 <<click>>
@@ -1093,53 +996,37 @@ So in this case the 'p' outputs the string "A's CONST"ｄ
 
 = class_eval(String)
 
-次に、文字列を渡す場合についてです。
-Next, let's look at performing class_eval with a string argument.
+Next,
+let's look at performing class_eval with a string argument.
 
-先ほどのものとの違いは4〜6行目だけです。
 The code example only differs on line 4(four) to 6(six).
 
-4行目で、class_evalを文字列を渡して呼び出します。
 On line 4, we pass a string to class_eval in the form of a HERE document.
 
-5行目で、定数CONSTを標準出力に出力します。
 On line 5, we print the content of CONST.
 
-6行目で、ヒアドキュメントの終端です。
 On line 6, we close the HERE document.
 
-そして、13行目で、module Aのメソッドfを呼び出します。
 Just as before, we call module A's f method on line 13.
 
-このときの定数CONSTを最初に探索する範囲がわかりますか？
-So, can you tell what the constant lookup scope is in this case?
-TODO:「最初に」は重要ですかね
+So, can you tell from what scope the constant lookup starts in this case?
 
 <<click>>
 
-実はこの枠の範囲です。
-Actually, on MacRuby, we would look for CONST within this green frame.
-TODO:これはMacRubyの挙動であってますか？
+Actually, we would look for CONST within this green frame.
 
 
-この理由を説明します。
 Let me explain the reason.
 
-メソッドfの実行時に、class_evalに渡された文字列をパーズ・解釈します。
-When we call module A's f method,
+Whenever we call module A's f method,
 we parse and evaluate the string that is passed to class_eval.
-TODO：この辺(この文＋３）は相談させてください。ちょっと曖昧さがあるので、正しい翻訳はむずかしいです。
 
-そのときに定数の探索範囲を決定します。
-And, the scope in which we look for CONST is determined when to be the scope in which the method f is run.
+And,
+the scope in which we look for CONST is determined to be the scope in which the method f is run.
 
-その結果、13行目の周辺が、定数の探索範囲となります。
-Therefore, the lookup scope becomes determine around line 13.
+Therefore, the lookup scope becomes the content of class K.
 
-このような実行時にかわる範囲のことをdynamic scopeといいます。
-We call the scope represented by the green frame for "Dynamic Scope".
-
-
+As you may know, we call this kind of scope for "Dynamic Scope".
 
 <<click>>
 
@@ -1149,58 +1036,41 @@ So in this case the 'p' outputs the string "A's CONST"ｄ
 
 = Constant Lookup is complex (part 2)
 
-TOR_TODO:
-
-最後にそれぞれを並べてみましょう。
 So lets look at the two cases together.
 
-class_evalに渡す引数が違うだけで、定数の探索範囲はこのように違ってきます。
 We can see that the scope of the constant lookup differs greatly depending on the kind of argument passed to class_eval.
 
 <<click>>
 
-= Manage somehow
-SLIDE_TODO:「Manage somehow」＞「I somehow managed to fix this」　ここの日本語を聞かせてください。あまりいい題名を思いつかないです。
+= I somehow managed to fix this
 
-
-このように複雑な定数探索の問題を修正するのは、簡単ではありませんでした。
 It was not easy to fix this error.
 
-2回のやり直しがありました。そして、3回目でようやく修正できました。
 I had to start over twice.
 And I was finally able to find a satisfactory solution in the third attempt.
-SLIDE_TODO:　Three attempts to get it right.
 
 <<click>>
 
-ソースコードの修正は3000行以上になりました。
 I edited more than 3000 lines of code.
-SLIDE_TODO: More than 3000 lines of code changed.
 
-この修正が完了したとき、MacRubyのメイン開発者であるLaurentは、チャット
-で私にこう書きました。
 When I finally managed to fix this error,
 Laurent who is a main developer of MacRuby,
 wrote the following to me,
 
 <<click>>
 
-21 Apr 2011 15:24
-Laurent S.
-it's official, kouji is the hero of the day/week/month/...? his patch seems to fix remaining lexical const lookup bugs :)
+it's official,
+kouji is the hero of the day/week/month/...?
+his patch seems to fix remaining lexical const lookup bugs :)
 
-私はとてもうれしかったです。
 And that made me very happy!!
 
 <<click>>
 
 = A very complex bug
 
-TOR_TODO:
-
-しかし、喜んでいたのもつかの間で、私は定数探索に関するとても難しいエラー
-を見つけました。
-However after enjoying a brief victory, I soon found a new and difficult issue related to constant lookup.
+However after enjoying a brief victory,
+I soon found a new and difficult issue related to constant lookup.
 
 <<click>>
 
@@ -1218,8 +1088,8 @@ On line two, we define constant B under module A.
 
 <<click>>
 
-On line five, we specify module A as receiver, and call
-class_eval with a do-end block.
+On line five, we specify module A as receiver,
+and call class_eval with a do-end block.
 
 <<click>>
 
@@ -1238,69 +1108,62 @@ This means that we are going to have to look up constant B.
 
 <<click>>
 
-このとき、最初にこの枠の範囲から定数Bを探索します。
 We are now using the patched MacRuby which implements Lexical scope.
-TODO: この追加を確認してくださ〜い。
 This means that we are going to start looking for constant B within the green frame.
 
-そして、見つからないため、Object、つまりトップレベルから定数Bを探索します。
 Naturally we fail to find B within the green frame.
-So we want to continue our search for B. This time we look in Object for constant B.
+So we want to continue our search for B.
+This time we look in Object for constant B.
 This also means that we are going to look for a constant called B that is defined at top level.
 
 <<click>>
 
-ここで注意が必要です。
 Here I would like to add a word of caution.
 
-class_evalのレシーバは、定数の探索範囲に含みません。これはRubyの言語仕様です。
 'class_eval' does not add it's own receiver(A) to the constant lookup scope.
 And this behavior is part of Ruby's specification.
 
-そして、両方とも見つからないため、定数Bの探索に失敗すると思ったのですが、
 So, I expected that the search for constant B would fail.
 
 <<click>>
 
 = A very complex bug (part 2)
 
-なんと、cRuby 1.9 ではAからも探索してしまい、定数Bを見つけてしまったのです。
-Surprisingly, cRuby 1.9 found constant B in module A.
+Surprisingly,
+cRuby 1.9 found constant B in module A.
 So it succeeded to find the constant B,
 even though it should fail according to the Ruby specification.
 
 <<click>>
 
-でも、Ruby 1.8.7 は私の想像通り、定数Bの探索に失敗します。
-On the other hand Ruby 1.8.7 worked as expected, and failed to find the constant B.
+On the other hand Ruby 1.8.7 worked as expected,
+and failed to find the constant B.
 
-当然、MacRuby もこのように動作します。
 MacRuby failed as well.
 
-困った私は matz に相談しました。
 So, I asked Matz for advice about this issue.
 
 <<click>>
 
-その結果、これは Ruby 1.9 のバグだということになりました。
 He said this is a bug in cRuby 1.9.
 
-そして、あったいう間に 1.8.7 と同じ動作に修正されました。
-And soon thereafter, cRuby 1.9's behavior was fixed to match the behavior of Ruby 1.8.7.
+And soon thereafter,
+cRuby 1.9's behavior was fixed to match the behavior of Ruby 1.8.7.
+
 <<click>>
 
 = Demo
 
-さぁ、それではみなさんに実際の成果をお見せするときがきました。
 OK, it's time to show you the result of my work.
 
-MacRuby で Rails を動作させます。
 Making Rails works on MacRuby.
 
-ここでは、Rails のバージョンは少し古いのですが 3.0.7 です。
-I will demonstrate Ruby on Rails running on MacRuby. I am using Rails 3.0.7, which is a bit old.
+I will demonstrate Ruby on Rails running on MacRuby.
+I am using Rails 3.0.7, which is a bit old.
 
-(デモを開始)
+
+(TABキーを押して、デモを開始)
+
 
 <<click>>
 
@@ -1310,14 +1173,10 @@ This looks all fine and good.
 But unfortunately,
 the server will abort if you click this link on the welcome page.
 
-SLIDE_TODO: 「Click here」＞「CLICK!」
-「Abort when I pressed "About your application’s environment"」＞「Abort if the "About your application’s environment" is link is clicked."
-
 Hmm, there is still work to be done.
-TODO: 追加の確認をおねがいします。
 
-And making Rails work on MacRuby is more difficult
-than I expected, perhaps even more difficult than implementing lexical constant lookup.
+And making Rails work on MacRuby is more difficult than I expected,
+perhaps even more difficult than implementing lexical constant lookup.
 
 <<click>>
 
@@ -1346,8 +1205,8 @@ This is the MacRuby Mailing List's address.
 
 = Conclusion
 
-私のプレゼンテーションのまとめです。
-So, I would like to conclude this presentation with a quick summary of what I have said so far.
+So,
+I would like to conclude this presentation with a quick summary of what I have said so far.
 
 <<click>>
 
@@ -1379,9 +1238,8 @@ for giving me the opportunity to give this presentation.
 
 <<click>>
 
-私の少ない英語力を補ってくれた同僚の Tor に感謝いたします。
-And, I would like to thank my co-worker Tor Yamamoto-Sorensen (@shakaijin) who helped me with this presentation.
-TODO:
+And,
+I would like to thank my co-worker Tor Yamamoto-Sorensen (@shakaijin) who helped me with this presentation.
 
 <<click>>
 

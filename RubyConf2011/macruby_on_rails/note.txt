@@ -318,47 +318,6 @@ Actually, MacRuby only runs on Mac OS X :P
 So, if we look at the whole...
 well, then it looks like this.
 
-<<click>>
-
-= Cocoa
-
-On Mac OS X,
-we have some libraries called Cocoa which are written in Objective-C.
-
-The Cocoa includes more or less all the features of Mac OS X,
-for instance a GUI toolkit, multimedia processing, text-to-speech and so on.
-
-The majority of Mac OS X applications are developed using Cocoa.
-
-<<click>>
-
-= MacRuby x Cocoa
-
-It is easy to use Cocoa in MacRuby.
-Actually, we could say that MacRuby exists in order to allow us to use Cocoa.
-
-<<click>>
-
-= MacRuby x Cocoa
-
-Well then, let's look at an example of how we can use Cocoa from MacRuby.
-
-<<click>>
-
-This is a sample program that plays a sound.
-
-<<click>>
-
-The purpose of the "framework" method is to load system libraries such as Cocoa.
-
-<<click>>
-
-This is the part where we are actually using Cocoa's functionality.
-We specify a filename and we generate an instance of a sound file.
-And then we call the "play" method to play back the sound.
-
-<<click>>
-
 So, now I am done with my introductory explanation of MacRuby.
 
 <<click>>
@@ -589,7 +548,7 @@ Have a look at this code.
 In this program,
 we define a catch block labeled "foo".
 Inside the catch block we have a begin-rescue where we raise an exception.
-And in the rescue block we use "throw" to jump out ouf the begin-rescue.
+And in the rescue block we use "throw" to jump out of the begin-rescue.
 
 Let's step through the execution again to see what happens in the MacRuby Exception stack,
 just like we did in the last example.
@@ -606,10 +565,6 @@ then we jump out of the block.
 On line 3,
 we raise exception A.
 So, it is pushed onto the stack.
-
-<<click>>
-
-On line 4, we rescue exception A and continue execution.
 
 <<click>>
 
@@ -990,7 +945,7 @@ We look for the constant CONST within the green frame.
 
 <<click>>
 
-So in this case the 'p' outputs the string "A's CONST"ｄ
+So in this case the 'p' outputs the string "A's CONST".
 
 <<click>>
 
@@ -1030,7 +985,7 @@ As you may know, we call this kind of scope for "Dynamic Scope".
 
 <<click>>
 
-So in this case the 'p' outputs the string "A's CONST"ｄ
+So in this case the 'p' outputs the string "A's CONST".
 
 <<click>>
 
